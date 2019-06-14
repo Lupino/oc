@@ -6,6 +6,7 @@ module Lib
 
 data Face = FaceX | FaceY | FaceNX | FaceNY
   deriving (Show)
+
 data Action = TurnLeft | TurnRight | Forward | Place | Up
   deriving (Show)
 
@@ -118,18 +119,47 @@ printLayer xs r =
     Nothing      -> r
     Just (p, ps) -> printLayer ps . place $ move p r
 
-layer :: Layer
-layer =
-  [ Point 1 1
-  , Point 2 1
-  , Point 3 1
-  , Point 1 2
-  , Point 1 3
-  ]
+printLayers :: [Layer] -> Robot -> Robot
+printLayers []     = id
+printLayers (x:xs) = printLayers xs . up . printLayer x
+
+ignoreLine :: String -> String
+ignoreLine []         = []
+ignoreLine ('\n': xs) = xs
+ignoreLine (_:xs)     = ignoreLine xs
+
+-- parseLayer xs x y
+parseLayer :: String -> Int -> Int -> Layer -> (Layer, String)
+parseLayer [] _ _ ps             = (ps, [])
+parseLayer ('0':xs) x y ps       = parseLayer xs (x+1) y ps
+parseLayer ('1':xs) x y ps       = parseLayer xs (x+1) y (Point x y : ps)
+parseLayer ('\n':'\n':xs) _ _ ps = (ps, xs)
+parseLayer ('\n':xs) _ y ps      = parseLayer xs 0 (y + 1) ps
+parseLayer ('#':xs) x y ps       = parseLayer (ignoreLine xs) x y ps
+parseLayer (_:xs) x y ps         = parseLayer xs x y ps
+
+parseLayers :: String -> [Layer]
+parseLayers [] = []
+parseLayers xs =
+  case (parseLayer xs 0 0 []) of
+    (layer, ps) -> layer : parseLayers ps
 
 robot :: Robot
 robot = Robot 0 0 FaceX []
 
+printAction :: Action -> Char
+printAction TurnLeft  = 'L'
+printAction TurnRight = 'R'
+printAction Forward   = 'F'
+printAction Place     = 'P'
+printAction Up        = 'U'
+
+printActions :: [Action] -> Int -> String
+printActions [] _     = []
+printActions (x:xs) i | i > 39 = printAction x : '\n' : printActions xs 0
+                      | otherwise = printAction x : printActions xs (i + 1)
+
 someFunc :: IO ()
 someFunc =  do
-  print $ printLayer layer robot
+  layers <- readFile "layers.txt"
+  putStrLn $ flip printActions 0 . robotActions . move (Point 0 0) $ printLayers (parseLayers layers) robot
