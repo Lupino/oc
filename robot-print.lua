@@ -1,4 +1,6 @@
 local robot = require("robot")
+local shell = require("shell")
+local args = shell.parse(...)
 local slot = 1
 local maxSlot = 64
 
@@ -42,12 +44,6 @@ function placeDown()
     robot.placeDown()
 end
 
--- for i = 3, 14, 1 do
---     local layer = torus[i]
---     placeLayer(layer)
---     up()
--- end
-
 function runLine(line)
     local len = string.len(line)
     for i = 1, len, 1 do
@@ -67,7 +63,7 @@ function runLine(line)
 end
 
 function main()
-    local file = io.open(arg[1])
+    local file = io.open(args[1])
     for line in file:lines() do
         runLine(line)
     end
