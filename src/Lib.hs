@@ -28,7 +28,7 @@ type Layer = [Point]
 
 turnLeft :: Robot -> Robot
 turnLeft r = r
-  { robotFace = go (robotFace r)
+  { robotFace    = go (robotFace r)
   , robotActions = robotActions r ++ [TurnLeft]
   }
   where go :: Face -> Face
@@ -39,7 +39,7 @@ turnLeft r = r
 
 turnRight :: Robot -> Robot
 turnRight r = r
-  { robotFace = go (robotFace r)
+  { robotFace    = go (robotFace r)
   , robotActions = robotActions r ++ [TurnRight]
   }
   where go :: Face -> Face
@@ -105,7 +105,7 @@ move :: Point -> Robot -> Robot
 move Point {..} = moveY pointY . moveX pointX
 
 distance :: Point -> Robot -> Int
-distance Point {..} Robot {..} = (pointX - robotX) * (pointX - robotX) + (pointY - robotY) * (pointY - robotY)
+distance Point {..} Robot {..} = abs (pointX - robotX) + abs (pointY - robotY)
 
 findNearPoint :: [Point] -> Robot -> Maybe (Point, [Point])
 findNearPoint [] _     = Nothing
