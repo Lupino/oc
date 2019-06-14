@@ -24,6 +24,12 @@ data Point = Point
   , pointY :: Int
   } deriving (Show)
 
+zeroPoint :: Point
+zeroPoint = Point 0 200
+
+newRobot :: Point -> Robot
+newRobot Point {..} = Robot pointX pointY FaceX []
+
 type Layer = [Point]
 
 turnLeft :: Robot -> Robot
@@ -136,18 +142,15 @@ parseLayer [] _ _ ps             = (ps, [])
 parseLayer ('0':xs) x y ps       = parseLayer xs (x+1) y ps
 parseLayer ('1':xs) x y ps       = parseLayer xs (x+1) y (Point x y : ps)
 parseLayer ('\n':'\n':xs) _ _ ps = (ps, xs)
-parseLayer ('\n':xs) _ y ps      = parseLayer xs 0 (y + 1) ps
+parseLayer ('\n':xs) _ y ps      = parseLayer xs (pointX zeroPoint) (y - 1) ps
 parseLayer ('#':xs) x y ps       = parseLayer (ignoreLine xs) x y ps
 parseLayer (_:xs) x y ps         = parseLayer xs x y ps
 
 parseLayers :: String -> [Layer]
 parseLayers [] = []
 parseLayers xs =
-  case (parseLayer xs 0 0 []) of
+  case (parseLayer xs (pointX zeroPoint) (pointY zeroPoint) []) of
     (layer, ps) -> layer : parseLayers ps
-
-robot :: Robot
-robot = Robot 0 0 FaceX []
 
 printAction :: Action -> Char
 printAction TurnLeft  = 'L'
@@ -170,4 +173,4 @@ someFunc =  do
                []    -> defaulFile
                (x:_) -> x
   layers <- readFile file
-  putStrLn $ flip printActions 0 . robotActions . move (Point 0 0) $ printLayers (parseLayers layers) robot
+  putStrLn $ flip printActions 0 . robotActions . move zeroPoint . printLayers (parseLayers layers) $ newRobot zeroPoint
