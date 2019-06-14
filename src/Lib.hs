@@ -4,6 +4,8 @@ module Lib
   ( someFunc
   ) where
 
+import           System.Environment (getArgs)
+
 data Face = FaceX | FaceY | FaceNX | FaceNY
   deriving (Show)
 
@@ -159,7 +161,13 @@ printActions [] _     = []
 printActions (x:xs) i | i > 39 = printAction x : '\n' : printActions xs 0
                       | otherwise = printAction x : printActions xs (i + 1)
 
+defaulFile = "layers.txt"
+
 someFunc :: IO ()
 someFunc =  do
-  layers <- readFile "layers.txt"
+  args <- getArgs
+  let file = case args of
+               []    -> defaulFile
+               (x:_) -> x
+  layers <- readFile file
   putStrLn $ flip printActions 0 . robotActions . move (Point 0 0) $ printLayers (parseLayers layers) robot
