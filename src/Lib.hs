@@ -9,12 +9,13 @@ import           System.Environment (getArgs)
 data Face = FaceX | FaceY | FaceNX | FaceNY
   deriving (Show)
 
-data Action = TurnLeft | TurnRight | Forward | Place | Up
+data Action = TurnLeft | TurnRight | Forward | Place | Up | Down
   deriving (Show)
 
 data Robot = Robot
   { robotX       :: Int
   , robotY       :: Int
+  , robotZ       :: Int
   , robotFace    :: Face
   , robotActions :: [Action]
   } deriving (Show)
@@ -28,7 +29,7 @@ zeroPoint :: Point
 zeroPoint = Point 0 200
 
 newRobot :: Point -> Robot
-newRobot Point {..} = Robot pointX pointY FaceY []
+newRobot Point {..} = Robot pointX pointY 0 FaceY []
 
 type Layer = [Point]
 
@@ -72,6 +73,13 @@ place r = r
 up :: Robot -> Robot
 up r = r
   { robotActions = robotActions r ++ [Up]
+  , robotZ = robotZ r + 1
+  }
+
+down :: Robot -> Robot
+down r = r
+  { robotActions = robotActions r ++ [Down]
+  , robotZ = robotZ r - 1
   }
 
 turnFace :: Face -> Robot -> Robot
@@ -105,6 +113,11 @@ moveX x r | x > robotX r = moveX x $ forward $ turnFace FaceX r
 moveY :: Int -> Robot -> Robot
 moveY y r | y > robotY r = moveY y $ forward $ turnFace FaceY r
           | y < robotY r = moveY y $ forward $ turnFace FaceNY r
+          | otherwise = r
+
+moveZ :: Int -> Robot -> Robot
+moveZ z r | z > robotZ r = moveZ z $ up r
+          | z < robotZ r = moveZ z $ down r
           | otherwise = r
 
 move :: Point -> Robot -> Robot
@@ -165,6 +178,7 @@ printAction TurnRight = 'R'
 printAction Forward   = 'F'
 printAction Place     = 'P'
 printAction Up        = 'U'
+printAction Down      = 'D'
 
 printActions :: [Action] -> Int -> String
 printActions [] _     = []
@@ -186,5 +200,7 @@ someFunc =  do
     . robotActions
     . turnFace FaceY
     . move initPoint
+    . moveZ 0
+    . move initPoint {pointX = pointX initPoint - 1}
     . printLayers layers
     $ newRobot initPoint
