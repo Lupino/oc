@@ -152,6 +152,13 @@ parseLayers xs =
   case (parseLayer xs (pointX zeroPoint) (pointY zeroPoint) []) of
     (layer, ps) -> layer : parseLayers ps
 
+getMinY :: [Layer] -> Int
+getMinY [] = pointY zeroPoint
+getMinY (x:xs) = min (go x) (getMinY xs)
+  where go :: Layer -> Int
+        go []     = pointY zeroPoint
+        go (p:ps) = min (pointY p) (go ps)
+
 printAction :: Action -> Char
 printAction TurnLeft  = 'L'
 printAction TurnRight = 'R'
@@ -172,5 +179,12 @@ someFunc =  do
   let file = case args of
                []    -> defaulFile
                (x:_) -> x
-  layers <- readFile file
-  putStrLn $ flip printActions 0 . robotActions . move zeroPoint . printLayers (parseLayers layers) $ newRobot zeroPoint
+  layers <- parseLayers <$> readFile file
+  let initPoint = zeroPoint { pointY = (getMinY layers) }
+  putStrLn
+    $ flip printActions 0
+    . robotActions
+    . turnFace FaceY
+    . move initPoint
+    . printLayers layers
+    $ newRobot initPoint
