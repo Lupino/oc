@@ -13,6 +13,15 @@ function up()
     robot.up()
 end
 
+function down()
+    local can, type = robot.detectDown()
+    if (can)
+    then
+        robot.swingDown()
+    end
+    robot.down()
+end
+
 function forward()
     local can, type = robot.detect()
     if (can)
@@ -58,6 +67,8 @@ function runLine(line)
             placeDown()
         elseif (byte == 85) then -- U
             up()
+        elseif (byte == 68) then -- D
+            down()
         end
     end
 end
