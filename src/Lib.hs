@@ -28,7 +28,7 @@ zeroPoint :: Point
 zeroPoint = Point 0 200
 
 newRobot :: Point -> Robot
-newRobot Point {..} = Robot pointX pointY FaceX []
+newRobot Point {..} = Robot pointX pointY FaceY []
 
 type Layer = [Point]
 
