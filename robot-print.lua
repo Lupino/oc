@@ -6,29 +6,32 @@ local maxSlot = 64
 
 function up()
     local can, type = robot.detectUp()
-    if (can)
-    then
+    if (can) then
         robot.swingUp()
+        up()
+    else
+        robot.up()
     end
-    robot.up()
 end
 
 function down()
     local can, type = robot.detectDown()
-    if (can)
-    then
+    if (can) then
         robot.swingDown()
+        down()
+    else
+        robot.down()
     end
-    robot.down()
 end
 
 function forward()
     local can, type = robot.detect()
-    if (can)
-    then
+    if (can) then
         robot.swing()
+        forward()
+    else
+        robot.forward()
     end
-    robot.forward()
 end
 
 function checkSlot()
@@ -39,18 +42,20 @@ function checkSlot()
 			slot = 1
 		end
         checkSlot()
+    else
+        robot.select(slot)
     end
-    robot.select(slot)
 end
 
 function placeDown()
     local can, type = robot.detectDown()
-    if (can)
-    then
+    if (can) then
         robot.swingDown()
+        placeDown()
+    else
+        checkSlot()
+        robot.placeDown()
     end
-    checkSlot()
-    robot.placeDown()
 end
 
 function runLine(line)
