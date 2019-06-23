@@ -102,9 +102,47 @@ function isEmptySlot(slot)
     end
 end
 
+function isFullSlot(slot)
+    print('isFullSlot', slot)
+    local count = robot.count(slot)
+    if count == 64 then
+        return true
+    else
+        return false
+    end
+end
+
 function transforTo(from, to)
     robot.select(from)
     robot.transforTo(to)
+end
+
+function hasItemAndNotFullSlot(slot)
+    if isEmptySlot(f) then
+        return false
+    end
+    if isFullSlot(f) then
+        return false
+    end
+    return true
+end
+
+function mergeItems()
+    for f = 1, maxSlot - 1, 1 do
+        if hasItemAndNotFullSlot(f) then
+            local name = getItemName(f)
+            for to = f + 1, maxSlot, 1 do
+                if hasItemAndNotFullSlot(to) then
+                    if isItem(to, name) then
+                        transforTo(from, to)
+                    end
+                end
+                if isEmptySlot(f) then
+                    break
+                end
+            end
+        end
+    end
 end
 
 function cleanSlot(slot)
@@ -123,6 +161,7 @@ function cleanSlot(slot)
 end
 
 function makeCraft()
+    mergeItems()
     if not cleanSlot(1) then
         return false
     end
