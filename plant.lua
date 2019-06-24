@@ -156,12 +156,11 @@ function cleanSlot(slot)
         return false
     end
 
-    transforTo(emptySlot, slot)
+    transferTo(slot, emptySlot)
     return cleanSlot(slot)
 end
 
 function makeCraft()
-    mergeItems()
     if not cleanSlot(1) then
         return false
     end
@@ -193,6 +192,7 @@ function makeCraft()
 end
 
 function crafting(name, count)
+    mergeItems()
     if not makeCraft() then
         return 2
     end
