@@ -118,10 +118,10 @@ function transferTo(from, to)
 end
 
 function hasItemAndNotFullSlot(slot)
-    if isEmptySlot(f) then
+    if isEmptySlot(slot) then
         return false
     end
-    if isFullSlot(f) then
+    if isFullSlot(slot) then
         return false
     end
     return true
