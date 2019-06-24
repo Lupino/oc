@@ -1,8 +1,21 @@
 local robot = require("robot")
 local shell = require("shell")
 local args = shell.parse(...)
+local component = require("component")
+
 local slot = 1
 local maxSlot = 64
+
+local itemName = ''
+
+function getItemName(slot)
+    local item = component.inventory_controller.getStackInInternalSlot(slot)
+    if item then
+        return item.name
+    else
+        return ''
+    end
+end
 
 function up()
     local can, type = robot.detectUp()
@@ -35,15 +48,15 @@ function forward()
 end
 
 function checkSlot()
-    local count = robot.count(slot)
-    if (count == 0) then
+    local newItemName = getItemName(slot)
+    if (newItemName == itemName) then
+        robot.select(slot)
+    else
         slot = slot + 1
         if (slot > maxSlot) then
 			slot = 1
 		end
         checkSlot()
-    else
-        robot.select(slot)
     end
 end
 
@@ -80,6 +93,7 @@ end
 
 function main()
     local file = io.open(args[1])
+    itemName = getItemName(1)
     for line in file:lines() do
         runLine(line)
     end
