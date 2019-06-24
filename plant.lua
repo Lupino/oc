@@ -112,9 +112,9 @@ function isFullSlot(slot)
     end
 end
 
-function transforTo(from, to)
+function transferTo(from, to)
     robot.select(from)
-    robot.transforTo(to)
+    robot.transferTo(to)
 end
 
 function hasItemAndNotFullSlot(slot)
@@ -131,10 +131,10 @@ function mergeItems()
     for f = 1, maxSlot - 1, 1 do
         if hasItemAndNotFullSlot(f) then
             local name = getItemName(f)
-            for to = f + 1, maxSlot, 1 do
-                if hasItemAndNotFullSlot(to) then
-                    if isItem(to, name) then
-                        transforTo(from, to)
+            for t = f + 1, maxSlot, 1 do
+                if hasItemAndNotFullSlot(t) then
+                    if isItem(t, name) then
+                        transferTo(f, t)
                     end
                 end
                 if isEmptySlot(f) then
@@ -202,7 +202,7 @@ function crafting(name, count)
         return 0
     end
 
-    transforTo(slot, 6)
+    transferTo(slot, 6)
 
     local emptySlot = findEmptySlot()
     if emptySlot == 0 then
