@@ -19,7 +19,7 @@ end
 
 function up()
     local can, type = robot.detectUp()
-    if (can) then
+    if can then
         robot.swingUp()
         up()
     else
@@ -29,7 +29,7 @@ end
 
 function down()
     local can, type = robot.detectDown()
-    if (can) then
+    if can then
         robot.swingDown()
         down()
     else
@@ -39,7 +39,7 @@ end
 
 function forward()
     local can, type = robot.detect()
-    if (can) then
+    if can then
         robot.swing()
         forward()
     else
@@ -49,7 +49,7 @@ end
 
 function checkSlot()
     local newItemName = getItemName(slot)
-    if (newItemName == itemName) then
+    if newItemName == itemName then
         robot.select(slot)
     else
         slot = slot + 1
@@ -75,17 +75,17 @@ function runLine(line)
     local len = string.len(line)
     for i = 1, len, 1 do
         local byte = string.byte(line, i)
-        if (byte == 76) then -- L
+        if byte == 76 then -- L
             robot.turnLeft()
-        elseif (byte == 82) then -- R
+        elseif byte == 82 then -- R
             robot.turnRight()
-        elseif (byte == 70) then -- F
+        elseif byte == 70 then -- F
             forward()
-        elseif (byte == 80) then -- P
+        elseif byte == 80 then -- P
             placeDown()
-        elseif (byte == 85) then -- U
+        elseif byte == 85 then -- U
             up()
-        elseif (byte == 68) then -- D
+        elseif byte == 68 then -- D
             down()
         end
     end
