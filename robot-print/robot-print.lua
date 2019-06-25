@@ -47,15 +47,24 @@ function forward()
     end
 end
 
+function findItem()
+    for s = 1, maxSlot, 1 do
+        if getItemName(s) == itemName then
+            return s
+        end
+    end
+    return 0
+end
+
 function checkSlot()
     local newItemName = getItemName(slot)
     if newItemName == itemName then
         robot.select(slot)
     else
-        slot = slot + 1
-        if (slot > maxSlot) then
-			slot = 1
-		end
+        slot = findItem()
+        if slot == 0 then
+            return
+        end
         checkSlot()
     end
 end
