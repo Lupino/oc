@@ -1,6 +1,6 @@
 local robot = require("robot")
 local shell = require("shell")
-local args = shell.parse(...)
+local args, opts = shell.parse(...)
 local component = require("component")
 
 local slot = 1
@@ -82,7 +82,9 @@ function runLine(line)
         elseif byte == 70 then -- F
             forward()
         elseif byte == 80 then -- P
-            placeDown()
+            if not opts.noplace then
+                placeDown()
+            end
         elseif byte == 85 then -- U
             up()
         elseif byte == 68 then -- D
