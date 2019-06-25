@@ -65,9 +65,9 @@ function isFullSlot(slot)
     end
 end
 
-function transferTo(from, to, count=nil)
+function transferTo(from, to, ...)
     robot.select(from)
-    robot.transferTo(to, count)
+    robot.transferTo(to, ...)
 end
 
 function hasItemAndNotFullSlot(slot)
@@ -195,17 +195,24 @@ function crafting9(name)
 end
 
 function main()
-    local ret = 0
+    local running = true
+    local slot = 0
+    local count = 0
     while running do
         if not crafting1(src0) then
             break
         end
-        if not crafting9(src1) then
-            break
-        end
+
         mergeItems()
+
+        slot = findItem(src1)
+        if slot > 0 then
+            count = robot.count(slot)
+            while count >= 18 do
+                crafting9(src1)
+            end
+        end
     end
 end
 
 main()
-
