@@ -159,37 +159,53 @@ function crafting1(name)
         return false
     end
     robot.select(emptySlot)
-    component.crafting.craft(18)
+    component.crafting.craft(64)
     return true
 end
 
-function crafting9(name)
-    print('crafting9', name)
+function crafting9(slot)
+    print('crafting9', slot)
     if not makeCraft() then
         return false
     end
-
-    local slot = findItem(name)
+    local slot = findItem(src1)
     if slot == 0 then
         return false
     end
-
-    transferTo(slot, 1, 2)
-    transferTo(slot, 2, 2)
-    transferTo(slot, 3, 2)
-    transferTo(slot, 5, 2)
-    transferTo(slot, 6, 2)
-    transferTo(slot, 7, 2)
-    transferTo(slot, 9, 2)
-    transferTo(slot, 10, 2)
-    transferTo(slot, 11, 2)
+    local count = robot.count(slot)
+    if count >= 63 then
+        count = 7
+    elseif count >= 54 then
+        count = 6
+    elseif count >= 45 then
+        count = 5
+    elseif count >= 36 then
+        count = 4
+    elseif count >= 27 then
+        count = 3
+    elseif count >= 18 then
+        count = 2
+    elseif count >= 9 then
+        count = 1
+    else
+        return false
+    end
+    transferTo(slot, 1, count)
+    transferTo(slot, 2, count)
+    transferTo(slot, 3, count)
+    transferTo(slot, 5, count)
+    transferTo(slot, 6, count)
+    transferTo(slot, 7, count)
+    transferTo(slot, 9, count)
+    transferTo(slot, 10, count)
+    transferTo(slot, 11, count)
 
     local emptySlot = findEmptySlot()
     if emptySlot == 0 then
         return false
     end
     robot.select(emptySlot)
-    component.crafting.craft(2)
+    component.crafting.craft(count)
     return true
 end
 
@@ -205,14 +221,6 @@ function main()
 
         while running do
             mergeItems()
-            slot = findItem(src1)
-            if slot == 0 then
-                break
-            end
-            count = robot.count(slot)
-            if count < 18 then
-                break
-            end
             if not crafting9(src1) then
                 break
             end
