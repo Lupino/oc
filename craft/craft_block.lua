@@ -19,9 +19,9 @@ function isItem(slot, name)
     return getItemName(slot) == name
 end
 
-function findItem(itemName)
+function findItem(itemName, slot)
     print('findItem', itemName)
-    for slot = 1, maxSlot, 1 do
+    for slot = slot, maxSlot, 1 do
         if isItem(slot, itemName) then
             return slot
         end
@@ -147,7 +147,7 @@ function crafting1(name)
         return false
     end
 
-    local slot = findItem(name)
+    local slot = findItem(name, 1)
     if slot == 0 then
         return false
     end
@@ -163,16 +163,22 @@ function crafting1(name)
     return true
 end
 
-function crafting9(slot)
-    print('crafting9', slot)
+function crafting9(src1)
+    print('crafting9', src1)
     if not makeCraft() then
         return false
     end
-    local slot = findItem(src1)
-    if slot == 0 then
-        return false
+    local slot = 0
+    while true do
+        slot = findItem(src1, slot + 1)
+        if slot == 0 then
+            return false
+        end
+        local count = robot.count(slot)
+        if count >= 9 then
+            break
+        end
     end
-    local count = robot.count(slot)
     if count >= 63 then
         count = 7
     elseif count >= 54 then
