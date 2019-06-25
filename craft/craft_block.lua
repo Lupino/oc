@@ -203,13 +203,17 @@ function main()
             break
         end
 
-        mergeItems()
 
-        slot = findItem(src1)
-        if slot > 0 then
-            count = robot.count(slot)
-            while count >= 18 do
-                crafting9(src1)
+        while running do
+            mergeItems()
+            slot = findItem(src1)
+            if slot > 0 then
+                count = robot.count(slot)
+                if count >= 18 then
+                    if not crafting9(src1) then
+                        break
+                    end
+                end
             end
         end
     end
