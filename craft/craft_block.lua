@@ -16,14 +16,13 @@ local src0 = getItemName(1)
 local src1 = getItemName(2)
 
 function isItem(slot, name)
-    print('isItem', slot, name)
     return getItemName(slot) == name
 end
 
 function findItem(itemName)
     print('findItem', itemName)
     for slot = 1, maxSlot, 1 do
-        if isItem(slot) then
+        if isItem(slot, itemName) then
             return slot
         end
     end
@@ -211,10 +210,11 @@ function main()
                 break
             end
             count = robot.count(slot)
-            if count >= 18 then
-                if not crafting9(src1) then
-                    break
-                end
+            if count < 18 then
+                break
+            end
+            if not crafting9(src1) then
+                break
             end
         end
     end
