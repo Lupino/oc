@@ -4,7 +4,7 @@ local args, opts = shell.parse(...)
 local component = require("component")
 
 local slot = 1
-local maxSlot = 64
+local maxSlot = robot.inventorySize()
 
 local itemName = ''
 
