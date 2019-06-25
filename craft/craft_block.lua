@@ -23,7 +23,7 @@ end
 function findItem(itemName)
     print('findItem', itemName)
     for slot = 1, maxSlot, 1 do
-        if getItemName(slot) == itemName then
+        if isItem(slot) then
             return slot
         end
     end
@@ -46,7 +46,6 @@ function findEmptySlot()
 end
 
 function isEmptySlot(slot)
-    print('isEmptySlot', slot)
     local count = robot.count(slot)
     if count == 0 then
         return true
@@ -56,7 +55,6 @@ function isEmptySlot(slot)
 end
 
 function isFullSlot(slot)
-    print('isFullSlot', slot)
     local count = robot.count(slot)
     if count == 64 then
         return true
@@ -145,6 +143,7 @@ function makeCraft()
 end
 
 function crafting1(name)
+    print('crafting1', name)
     if not makeCraft() then
         return false
     end
@@ -166,6 +165,7 @@ function crafting1(name)
 end
 
 function crafting9(name)
+    print('crafting9', name)
     if not makeCraft() then
         return false
     end
@@ -199,20 +199,21 @@ function main()
     local slot = 0
     local count = 0
     while running do
+        mergeItems()
         if not crafting1(src0) then
             break
         end
 
-
         while running do
             mergeItems()
             slot = findItem(src1)
-            if slot > 0 then
-                count = robot.count(slot)
-                if count >= 18 then
-                    if not crafting9(src1) then
-                        break
-                    end
+            if slot == 0 then
+                break
+            end
+            count = robot.count(slot)
+            if count >= 18 then
+                if not crafting9(src1) then
+                    break
                 end
             end
         end
