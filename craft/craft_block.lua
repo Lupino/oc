@@ -169,6 +169,7 @@ function crafting9(src1)
         return false
     end
     local slot = 0
+    local count = 0
     while true do
         slot = findItem(src1, slot + 1)
         if slot == 0 then
@@ -179,23 +180,13 @@ function crafting9(src1)
             break
         end
     end
-    if count >= 63 then
-        count = 7
-    elseif count >= 54 then
-        count = 6
-    elseif count >= 45 then
-        count = 5
-    elseif count >= 36 then
-        count = 4
-    elseif count >= 27 then
-        count = 3
-    elseif count >= 18 then
-        count = 2
-    elseif count >= 9 then
-        count = 1
-    else
+
+    if count < 9 then
         return false
     end
+
+    count = math.floor(count / 9)
+
     transferTo(slot, 1, count)
     transferTo(slot, 2, count)
     transferTo(slot, 3, count)
