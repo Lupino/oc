@@ -200,7 +200,7 @@ someFunc =  do
     $ flip printActions 0
     . robotActions
     . turnFace FaceY
-    . moveX (pointX initPoint)
+    . move initPoint
     . move initPoint {pointX = pointX initPoint - 1}
     . printLayers layers
     $ newRobot initPoint
