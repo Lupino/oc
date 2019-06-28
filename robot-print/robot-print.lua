@@ -111,13 +111,24 @@ function runLine(line)
     end
 end
 
-function main()
-    local file = io.open(args[1])
+function runPrint(filename)
+    local file = io.open(filename)
     itemName = getItemName(1)
     for line in file:lines() do
         runLine(line)
     end
     file:close()
+end
+
+function main()
+    if opts.dig then
+        while true do
+            runPrint(args[1])
+            down()
+        end
+    else
+        runPrint(args[1])
+    end
 end
 
 main()
