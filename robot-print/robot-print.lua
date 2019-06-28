@@ -9,6 +9,7 @@ local maxSlot = robot.inventorySize()
 local enableIC = component.isAvailable("inventory_controller")
 
 local itemName = ''
+local ignorePlace = false
 
 function getItemName(slot)
     if not enableIC then
@@ -83,7 +84,7 @@ function placeDown()
         robot.swingDown()
         placeDown()
     else
-        if not opts.noplace and itemName ~= '' then
+        if itemName ~= '' then
             if checkSlot() then
                 robot.placeDown()
             end
@@ -102,7 +103,9 @@ function runLine(line)
         elseif byte == 70 then -- F
             forward()
         elseif byte == 80 then -- P
-            placeDown()
+            if not ignorePlace then
+                placeDown()
+            end
         elseif byte == 85 then -- U
             up()
         elseif byte == 68 then -- D
@@ -120,13 +123,26 @@ function runPrint(filename)
 end
 
 function main()
+    itemName = getItemName(1)
     if opts.dig then
+        ignorePlace = true
         while true do
             runPrint(args[1])
             down()
         end
+    elseif opts.digforward then
+        ignorePlace = true
+        while true do
+            runPrint(args[1])
+            forward()
+        end
+    elseif opts.digup then
+        ignorePlace = true
+        while true do
+            runPrint(args[1])
+            up()
+        end
     else
-        itemName = getItemName(1)
         runPrint(args[1])
     end
 end
