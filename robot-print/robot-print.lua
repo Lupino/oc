@@ -3,12 +3,18 @@ local shell = require("shell")
 local args, opts = shell.parse(...)
 local component = require("component")
 
-local slot = 1
+local currentSlot = 1
 local maxSlot = robot.inventorySize()
+
+local enableIC = component.isAvailable("inventory_controller")
 
 local itemName = ''
 
 function getItemName(slot)
+    if not enableIC then
+        return ''
+    end
+
     local item = component.inventory_controller.getStackInInternalSlot(slot)
     if item then
         return item.name
@@ -57,26 +63,31 @@ function findItem()
 end
 
 function checkSlot()
-    local newItemName = getItemName(slot)
+    local newItemName = getItemName(currentSlot)
     if newItemName == itemName then
-        robot.select(slot)
+        robot.select(currentSlot)
+        return true
     else
-        slot = findItem()
-        if slot == 0 then
-            return
+        currentSlot = findItem()
+        if currentSlot ~= 0 then
+            robot.select(currentSlot)
+            return true
         end
-        checkSlot()
+        return false
     end
 end
 
 function placeDown()
     local can, type = robot.detectDown()
-    if (can) then
+    if can then
         robot.swingDown()
         placeDown()
     else
-        checkSlot()
-        robot.placeDown()
+        if not opts.noplace and itemName ~= '' then
+            if checkSlot() then
+                robot.placeDown()
+            end
+        end
     end
 end
 
@@ -91,9 +102,7 @@ function runLine(line)
         elseif byte == 70 then -- F
             forward()
         elseif byte == 80 then -- P
-            if not opts.noplace then
-                placeDown()
-            end
+            placeDown()
         elseif byte == 85 then -- U
             up()
         elseif byte == 68 then -- D
