@@ -113,7 +113,6 @@ end
 
 function runPrint(filename)
     local file = io.open(filename)
-    itemName = getItemName(1)
     for line in file:lines() do
         runLine(line)
     end
@@ -127,6 +126,7 @@ function main()
             down()
         end
     else
+        itemName = getItemName(1)
         runPrint(args[1])
     end
 end
