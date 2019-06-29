@@ -29,7 +29,7 @@ function placeSeed()
     if craft.isItem(currentSeedSlot, seed) then
         return placeItem(currentSeedSlot)
     end
-    local slot = craft.findItem(seed)
+    local slot = craft.findItem(seed, 1)
     if slot == 0 then
         return false
     end
@@ -45,7 +45,7 @@ function placeDye()
             return 0
         end
     end
-    local slot = craft.findItem(dye)
+    local slot = craft.findItem(dye, 1)
     if slot == 0 then
         return 2
     end
@@ -56,7 +56,7 @@ end
 function runPlaceDye()
     local ret = placeDye()
     if ret == 2 then
-        carft.mergeItems()
+        craft.mergeItems()
         ret = craft.crafting1(bone)
         if ret == 2 then
             return false
