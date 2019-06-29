@@ -3,6 +3,8 @@ local component = require('component')
 
 local maxSlot = robot.inventorySize()
 
+local craftTable = {1,2,3,5,6,7, 9, 10, 11}
+
 function getItemName(slot)
     local item = component.inventory_controller.getStackInInternalSlot(slot)
     if item then
@@ -78,17 +80,29 @@ function hasItemAndNotFullSlot(slot)
 end
 
 function mergeItems()
-    for f = 1, maxSlot - 1, 1 do
-        if hasItemAndNotFullSlot(f) then
-            local name = getItemName(f)
-            for t = f + 1, maxSlot, 1 do
-                if hasItemAndNotFullSlot(t) then
-                    if isItem(t, name) then
-                        transferTo(f, t)
+    local slots = {}
+    for slot = 1, maxSlot, 1 do
+        if hasItemAndNotFullSlot(slot) then
+            local name = getItemName(slot)
+            if slots[name] then
+                table.insert(slots[name], slot)
+            else
+                slots[name] = {slot}
+            end
+        end
+    end
+
+    for name, ss in ipairs(slots) do
+        print('mergeItems:', name)
+        for f = 1, #ss - 1, 1 do
+            if hasItemAndNotFullSlot(ss[f]) then
+                for t = f + 1, #ss, 1 do
+                    if hasItemAndNotFullSlot(ss[t]) then
+                        transferTo(ss[f], ss[t])
                     end
-                end
-                if isEmptySlot(f) then
-                    break
+                    if isEmptySlot(ss[f]) then
+                        break
+                    end
                 end
             end
         end
@@ -111,32 +125,10 @@ function cleanSlot(slot)
 end
 
 function makeCraft()
-    if not cleanSlot(1) then
-        return false
-    end
-    if not cleanSlot(2) then
-        return false
-    end
-    if not cleanSlot(3) then
-        return false
-    end
-    if not cleanSlot(5) then
-        return false
-    end
-    if not cleanSlot(6) then
-        return false
-    end
-    if not cleanSlot(7) then
-        return false
-    end
-    if not cleanSlot(9) then
-        return false
-    end
-    if not cleanSlot(10) then
-        return false
-    end
-    if not cleanSlot(11) then
-        return false
+    for k, slot in ipairs(craftTable) do
+        if not cleanSlot(slot) then
+            return false
+        end
     end
     return true
 end
@@ -187,15 +179,9 @@ function crafting9(src1)
 
     count = math.floor(count / 9)
 
-    transferTo(slot, 1, count)
-    transferTo(slot, 2, count)
-    transferTo(slot, 3, count)
-    transferTo(slot, 5, count)
-    transferTo(slot, 6, count)
-    transferTo(slot, 7, count)
-    transferTo(slot, 9, count)
-    transferTo(slot, 10, count)
-    transferTo(slot, 11, count)
+    for k, t in ipairs(craftTable) do
+        transferTo(slot, t, count)
+    end
 
     local emptySlot = findEmptySlot()
     if emptySlot == 0 then
