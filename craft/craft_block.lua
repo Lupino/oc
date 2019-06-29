@@ -3,7 +3,7 @@ local component = require('component')
 
 local maxSlot = robot.inventorySize()
 
-local craftTable = {1,2,3,5,6,7, 9, 10, 11}
+local craftTable = {1, 2, 3, 5, 6, 7, 9, 10, 11}
 
 function getItemName(slot)
     local item = component.inventory_controller.getStackInInternalSlot(slot)
@@ -92,7 +92,7 @@ function mergeItems()
         end
     end
 
-    for name, ss in ipairs(slots) do
+    for name, ss in pairs(slots) do
         print('mergeItems:', name)
         for f = 1, #ss - 1, 1 do
             if hasItemAndNotFullSlot(ss[f]) then
@@ -125,7 +125,7 @@ function cleanSlot(slot)
 end
 
 function makeCraft()
-    for k, slot in ipairs(craftTable) do
+    for k, slot in pairs(craftTable) do
         if not cleanSlot(slot) then
             return false
         end
@@ -167,7 +167,7 @@ function crafting9(src1)
         if slot == 0 then
             return false
         end
-        local count = robot.count(slot)
+        count = robot.count(slot)
         if count >= 9 then
             break
         end
@@ -179,7 +179,7 @@ function crafting9(src1)
 
     count = math.floor(count / 9)
 
-    for k, t in ipairs(craftTable) do
+    for k, t in pairs(craftTable) do
         transferTo(slot, t, count)
     end
 
