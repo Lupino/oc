@@ -4,10 +4,15 @@ local component = require('component')
 local maxSlot = robot.inventorySize()
 
 local craftTable = {1, 2, 3, 5, 6, 7, 9, 10, 11}
+local enableIC = component.isAvailable("inventory_controller")
 
 local craft = {}
 
 function getItemName(slot)
+    if not enableIC then
+        return ''
+    end
+
     local item = component.inventory_controller.getStackInInternalSlot(slot)
     if item then
         return item.name
@@ -134,6 +139,9 @@ end
 
 function crafting1(name)
     print('crafting1', name)
+    if name == '' then
+        return false
+    end
     if not makeCraft() then
         return false
     end
@@ -154,15 +162,18 @@ function crafting1(name)
     return true
 end
 
-function crafting9(src1)
-    print('crafting9', src1)
+function crafting9(name)
+    print('crafting9', name)
+    if name == '' then
+        return false
+    end
     if not makeCraft() then
         return false
     end
     local slot = 0
     local count = 0
     while true do
-        slot = findItem(src1, slot + 1)
+        slot = findItem(name, slot + 1)
         if slot == 0 then
             return false
         end
@@ -192,6 +203,8 @@ function crafting9(src1)
 end
 
 craft.getItemName = getItemName
+craft.findItem = findItem
+craft.isItem = isItem
 craft.mergeItems = mergeItems
 craft.crafting1 = crafting1
 craft.crafting9 = crafting9
