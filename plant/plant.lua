@@ -57,18 +57,9 @@ function runPlaceDye()
     local ret = placeDye()
     if ret == 2 then
         craft.mergeItems()
-        ret = craft.crafting1(bone)
-        if ret == 2 then
-            return false
-        elseif ret == 0 then
-            ret = craft.crafting1(fruitBone)
-            if ret == 2 then
-                return false
-            elseif ret == 0 then
-                ret = craft.crafting1(boneBlock)
-                if ret == 2 then
-                    return false
-                elseif ret == 0 then
+        if not craft.crafting1(boneBlock) then
+            if not craft.crafting1(bone) then
+                if not craft.crafting1(fruitBone) then
                     return false
                 end
             end
