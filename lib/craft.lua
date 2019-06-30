@@ -1,28 +1,98 @@
 local robot = require('robot')
 local component = require('component')
+local sides = require('sides')
 
 local maxSlot = robot.inventorySize()
 
 local craftTable = {1, 2, 3, 5, 6, 7, 9, 10, 11}
-local enableIC = component.isAvailable("inventory_controller")
+local valid_sides = {sides.bottom, sides.top, sides.front}
+
+local ic = nil
+if component.isAvailable("inventory_controller") then
+    ic = component.inventory_controller
+end
 
 local craft = {}
 
 function getItemName(slot)
-    if not enableIC then
-        return ''
+    if ic then
+        local item = ic.getStackInInternalSlot(slot)
+        if item then
+            return item.name
+        end
     end
-
-    local item = component.inventory_controller.getStackInInternalSlot(slot)
-    if item then
-        return item.name
-    else
-        return ''
-    end
+    return ''
 end
 
 function isItem(slot, name)
     return getItemName(slot) == name
+end
+
+function getSideItemName(side, slot)
+    if ic then
+        local item = ic.getStackInSlot(slot)
+        if item then
+            return item.name
+        end
+    end
+    return ''
+end
+
+function isSideItem(side, slot, name)
+    return getSideItemName(side, slot) == name
+end
+
+function findSideItem(side, itemName)
+    if ic then
+        local max = ic.getInventorySize(side)
+        if max then
+            for slot = 1, max, 1 do
+                if isSideItem(side, slot, itemName) then
+                    return slot
+                end
+            end
+        end
+    end
+    return 0
+end
+
+function findItemOnSides(itemName)
+    for k, side in pairs(valid_sides) do
+        local slot = findSideItem(side, itemName)
+        if slot > 0 then
+            return suckFromSlot(side, slot)
+        end
+    end
+    return 0
+end
+
+function suckFromSlot(side, slot)
+    if ic then
+        local newSlot = findEmptySlot()
+        if newSlot == 0 then
+            newSlot = cleanASlot()
+        end
+
+        if newSlot > 0 then
+            robot.select(newSlot)
+            ic.suckFromSlot(side, slot)
+            return newSlot
+        end
+    end
+    return 0
+end
+
+
+function dropIntoSlot(slot)
+    if ic then
+        robot.select(slot)
+        local side, newSlot = findEmptySlotOnSides()
+        if newSlot > 0 then
+            ic.dropIntoSlot(side, newSlot)
+            return true
+        end
+    end
+    return false
 end
 
 function findItem(itemName, slot)
@@ -57,6 +127,56 @@ function isEmptySlot(slot)
     else
         return false
     end
+end
+
+function findEmptySideSlot(side)
+    if ic then
+        local max = ic.getInventorySize(side)
+        if max then
+            for slot = 1, max, 1 do
+                if isEmptySideSlot(side, slot) then
+                    return slot
+                end
+            end
+        end
+    end
+    return 0
+end
+
+function isEmptySideSlot(side, slot)
+    if ic then
+        return ic.getSlotStackSize(side, slot) == 0
+    end
+    return false
+end
+
+function isFullSideSlot(side, slot)
+    if ic then
+        return ic.getSlotStackSize(side, slot) == 64
+    end
+    return false
+end
+
+function findEmptySlotOnSides()
+    for k, side in pairs(valid_sides) do
+        local slot = findEmptySideSlot(side)
+        if slot > 0 then
+            return side, slot
+        end
+    end
+    return 0, 0
+end
+
+function cleanASlot()
+    for slot = 12, maxSlot, 1 do
+        if isFullSlot(slot) then
+            if dropIntoSlot(slot) then
+                return slot
+            end
+            break
+        end
+    end
+    return 0
 end
 
 function isFullSlot(slot)
@@ -121,7 +241,10 @@ function cleanSlot(slot)
     local emptySlot = findEmptySlot()
 
     if emptySlot == 0 then
-        return false
+        emptySlot = cleanASlot()
+        if emptySlot == 0 then
+            return false
+        end
     end
 
     transferTo(slot, emptySlot)
@@ -148,14 +271,20 @@ function crafting1(name)
 
     local slot = findItem(name, 1)
     if slot == 0 then
-        return false
+        slot = findItemOnSides(name)
+        if slot == 0 then
+            return false
+        end
     end
 
     transferTo(slot, 6)
 
     local emptySlot = findEmptySlot()
     if emptySlot == 0 then
-        return false
+        emptySlot = cleanASlot()
+        if emptySlot == 0 then
+            return false
+        end
     end
     robot.select(emptySlot)
     component.crafting.craft(64)
@@ -175,7 +304,10 @@ function crafting9(name)
     while true do
         slot = findItem(name, slot + 1)
         if slot == 0 then
-            return false
+            slot = findItemOnSides(name)
+            if slot == 0 then
+                return false
+            end
         end
         count = robot.count(slot)
         if count >= 9 then
@@ -195,7 +327,10 @@ function crafting9(name)
 
     local emptySlot = findEmptySlot()
     if emptySlot == 0 then
-        return false
+        emptySlot = cleanASlot()
+        if emptySlot == 0 then
+            return false
+        end
     end
     robot.select(emptySlot)
     component.crafting.craft(count)
@@ -204,6 +339,7 @@ end
 
 craft.getItemName = getItemName
 craft.findItem = findItem
+craft.findItemOnSides = findItemOnSides
 craft.isItem = isItem
 craft.mergeItems = mergeItems
 craft.crafting1 = crafting1
