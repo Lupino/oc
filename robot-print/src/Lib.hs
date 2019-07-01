@@ -211,26 +211,28 @@ data Options = Options
   { placeOpt  :: PlaceOpt
   , parseOpt  :: ParseOpt
   , layerFile :: FilePath
+  , showHelp  :: Bool
   } deriving Show
 
 defaultOptions = Options
-  { placeOpt = PlaceDown
-  , parseOpt = XYZ
+  { placeOpt  = PlaceDown
+  , parseOpt  = XYZ
   , layerFile = "layers.txt"
+  , showHelp  = False
   }
 
 parseOptions :: Options -> [String] -> Options
 parseOptions opt []                  = opt
+parseOptions opt ("-h":xs)           = parseOptions opt {showHelp = True} xs
+parseOptions opt ("--help":xs)       = parseOptions opt {showHelp = True} xs
 parseOptions opt ("--xyz":xs)        = parseOptions opt {parseOpt = XYZ} xs
 parseOptions opt ("--xzy":xs)        = parseOptions opt {parseOpt = XZY} xs
 parseOptions opt ("--no-place":xs)   = parseOptions opt {placeOpt = NoPlace} xs
 parseOptions opt ("--place-down":xs) = parseOptions opt {placeOpt = PlaceDown} xs
 parseOptions opt (x:xs)              = parseOptions opt {layerFile = x} xs
 
-someFunc :: IO ()
-someFunc =  do
-  Options {..} <- parseOptions defaultOptions <$> getArgs
-
+runPrint :: Options -> IO ()
+runPrint Options {..} = do
   layers <- parseLayers parseOpt 0 <$> readFile layerFile
   let initPoint = zeroPoint { pointY = getMinY layers, pointZ = getMinZ layers }
   putStrLn
@@ -241,3 +243,12 @@ someFunc =  do
     . move initPoint {pointX = pointX initPoint - 1}
     . printLayers layers
     $ newRobot placeOpt initPoint
+
+printHelp :: IO ()
+printHelp = putStrLn "robot-print [--xyz|--xzy] [--no-place|--place-down] [-h|--help] layers.txt"
+
+someFunc :: IO ()
+someFunc =  do
+  opt <- parseOptions defaultOptions <$> getArgs
+
+  if showHelp opt then printHelp else runPrint opt
