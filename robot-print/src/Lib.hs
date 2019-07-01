@@ -13,6 +13,10 @@ data Action = TurnLeft | TurnRight | Forward | Place | Up | Down
   deriving (Show)
 
 data PlaceOpt = NoPlace | PlaceDown
+  deriving (Show)
+
+data ParseOpt = XYZ | XZY
+  deriving (Show)
 
 data Robot = Robot
   { robotX        :: Int
@@ -30,7 +34,7 @@ data Point = Point
   } deriving (Show)
 
 zeroPoint :: Point
-zeroPoint = Point 0 200 0
+zeroPoint = Point 0 200 200
 
 newRobot :: PlaceOpt -> Point -> Robot
 newRobot opt Point {..} = Robot pointX pointY pointZ FaceY [] opt
@@ -156,27 +160,39 @@ ignoreLine []         = []
 ignoreLine ('\n': xs) = xs
 ignoreLine (_:xs)     = ignoreLine xs
 
--- parseLayer xs x y
-parseLayer :: String -> Int -> Int -> Int -> Layer -> (Layer, String)
-parseLayer [] _ _ _ ps             = (ps, [])
-parseLayer ('0':xs) x y z ps       = parseLayer xs (x+1) y z ps
-parseLayer ('1':xs) x y z ps       = parseLayer xs (x+1) y z (Point x y z : ps)
-parseLayer ('\n':'\n':xs) _ _ _ ps = (ps, xs)
-parseLayer ('\n':xs) _ y z ps      = parseLayer xs (pointX zeroPoint) (y - 1) z ps
-parseLayer ('#':xs) x y z ps       = parseLayer (ignoreLine xs) x y z ps
-parseLayer (_:xs) x y z ps         = parseLayer xs x y z ps
+-- parseLayer opt xs x y z l
+parseLayer :: ParseOpt -> String -> Int -> Int -> Int -> Layer -> (Layer, String)
+parseLayer _   [] _ _ _ ps             = (ps, [])
+parseLayer opt ('0':xs) x y z ps       = parseLayer opt xs (x+1) y z ps
+parseLayer opt ('1':xs) x y z ps       = parseLayer opt xs (x+1) y z (Point x y z : ps)
+parseLayer _   ('\n':'\n':xs) _ _ _ ps = (ps, xs)
+parseLayer XYZ ('\n':xs) _ y z ps      = parseLayer XYZ xs (pointX zeroPoint) (y - 1) z ps
+parseLayer XZY ('\n':xs) _ y z ps      = parseLayer XZY xs (pointX zeroPoint) y (z - 1) ps
+parseLayer opt ('#':xs) x y z ps       = parseLayer opt (ignoreLine xs) x y z ps
+parseLayer opt (_:xs) x y z ps         = parseLayer opt xs x y z ps
 
-parseLayers :: Int -> String -> [Layer]
-parseLayers _ [] = []
-parseLayers z xs =
-  case parseLayer xs (pointX zeroPoint) (pointY zeroPoint) z [] of
-    (layer, ps) -> layer : parseLayers (z + 1) ps
+
+parseLayers :: ParseOpt -> Int -> String -> [Layer]
+parseLayers _ _ [] = []
+parseLayers XYZ z xs =
+  case parseLayer XYZ xs (pointX zeroPoint) (pointY zeroPoint) z [] of
+    (layer, ps) -> layer : parseLayers XYZ (z + 1) ps
+
+parseLayers XZY y xs =
+  case parseLayer XZY xs (pointX zeroPoint) y (pointZ zeroPoint) [] of
+    (layer, ps) -> layer : parseLayers XZY (y + 1) ps
 
 getMinY :: [Layer] -> Int
 getMinY [] = pointY zeroPoint
 getMinY (x:xs) = min (go x) (getMinY xs)
   where go :: Layer -> Int
         go = foldr (min . pointY) (pointY zeroPoint)
+
+getMinZ :: [Layer] -> Int
+getMinZ [] = pointZ zeroPoint
+getMinZ (x:xs) = min (go x) (getMinZ xs)
+  where go :: Layer -> Int
+        go = foldr (min . pointZ) (pointZ zeroPoint)
 
 printAction :: Action -> Char
 printAction TurnLeft  = 'L'
@@ -191,19 +207,32 @@ printActions [] _     = []
 printActions (x:xs) i | i > 39 = printAction x : '\n' : printActions xs 0
                       | otherwise = printAction x : printActions xs (i + 1)
 
-defaulFile = "layers.txt"
-defaultPlaceOpt = PlaceDown
+data Options = Options
+  { placeOpt  :: PlaceOpt
+  , parseOpt  :: ParseOpt
+  , layerFile :: FilePath
+  } deriving Show
+
+defaultOptions = Options
+  { placeOpt = PlaceDown
+  , parseOpt = XYZ
+  , layerFile = "layers.txt"
+  }
+
+parseOptions :: Options -> [String] -> Options
+parseOptions opt []                  = opt
+parseOptions opt ("--xyz":xs)        = parseOptions opt {parseOpt = XYZ} xs
+parseOptions opt ("--xzy":xs)        = parseOptions opt {parseOpt = XZY} xs
+parseOptions opt ("--no-place":xs)   = parseOptions opt {placeOpt = NoPlace} xs
+parseOptions opt ("--place-down":xs) = parseOptions opt {placeOpt = PlaceDown} xs
+parseOptions opt (x:xs)              = parseOptions opt {layerFile = x} xs
 
 someFunc :: IO ()
 someFunc =  do
-  args <- getArgs
-  let (file, placeOpt) = case args of
-               []         -> (defaulFile, defaultPlaceOpt)
-               [x]        -> (x, defaultPlaceOpt)
-               ("PD":x:_) -> (x, PlaceDown)
-               ("NP":x:_) -> (x, NoPlace)
-  layers <- parseLayers 0 <$> readFile file
-  let initPoint = zeroPoint { pointY = getMinY layers }
+  Options {..} <- parseOptions defaultOptions <$> getArgs
+
+  layers <- parseLayers parseOpt 0 <$> readFile layerFile
+  let initPoint = zeroPoint { pointY = getMinY layers, pointZ = getMinZ layers }
   putStrLn
     $ flip printActions 0
     . robotActions
