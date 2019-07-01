@@ -12,12 +12,15 @@ data Face = FaceX | FaceY | FaceNX | FaceNY
 data Action = TurnLeft | TurnRight | Forward | Place | Up | Down
   deriving (Show)
 
+data PlaceOpt = NoPlace | PlaceDown
+
 data Robot = Robot
-  { robotX       :: Int
-  , robotY       :: Int
-  , robotZ       :: Int
-  , robotFace    :: Face
-  , robotActions :: [Action]
+  { robotX        :: Int
+  , robotY        :: Int
+  , robotZ        :: Int
+  , robotFace     :: Face
+  , robotActions  :: [Action]
+  , robotPlaceOpt :: PlaceOpt
   } deriving (Show)
 
 data Point = Point
@@ -29,8 +32,8 @@ data Point = Point
 zeroPoint :: Point
 zeroPoint = Point 0 200 0
 
-newRobot :: Point -> Robot
-newRobot Point {..} = Robot pointX pointY pointZ FaceY []
+newRobot :: PlaceOpt -> Point -> Robot
+newRobot opt Point {..} = Robot pointX pointY pointZ FaceY [] opt
 
 type Layer = [Point]
 
@@ -67,9 +70,12 @@ forward r = (go $ robotFace r)
         go FaceNY = r { robotY = robotY r - 1 }
 
 place :: Robot -> Robot
-place r = r
-  { robotActions = robotActions r ++ [Place]
-  }
+place r = go (robotPlaceOpt r)
+  where go :: PlaceOpt -> Robot
+        go NoPlace = r
+        go PlaceDown = r
+          { robotActions = robotActions r ++ [Place]
+          }
 
 up :: Robot -> Robot
 up r = r
@@ -132,8 +138,8 @@ findNearPoint [] _     = Nothing
 findNearPoint [x] _    = Just (x, [])
 findNearPoint (x:xs) r = do
   (p, ps) <- findNearPoint xs r
-  if distance p r < distance x r then return $ (p, x:ps)
-                                 else return $ (x, p:ps)
+  if distance p r < distance x r then return (p, x:ps)
+                                 else return (x, p:ps)
 
 printLayer :: [Point] -> Robot -> Robot
 printLayer xs r =
@@ -163,15 +169,14 @@ parseLayer (_:xs) x y z ps         = parseLayer xs x y z ps
 parseLayers :: Int -> String -> [Layer]
 parseLayers _ [] = []
 parseLayers z xs =
-  case (parseLayer xs (pointX zeroPoint) (pointY zeroPoint) z []) of
+  case parseLayer xs (pointX zeroPoint) (pointY zeroPoint) z [] of
     (layer, ps) -> layer : parseLayers (z + 1) ps
 
 getMinY :: [Layer] -> Int
 getMinY [] = pointY zeroPoint
 getMinY (x:xs) = min (go x) (getMinY xs)
   where go :: Layer -> Int
-        go []     = pointY zeroPoint
-        go (p:ps) = min (pointY p) (go ps)
+        go = foldr (min . pointY) (pointY zeroPoint)
 
 printAction :: Action -> Char
 printAction TurnLeft  = 'L'
@@ -187,15 +192,18 @@ printActions (x:xs) i | i > 39 = printAction x : '\n' : printActions xs 0
                       | otherwise = printAction x : printActions xs (i + 1)
 
 defaulFile = "layers.txt"
+defaultPlaceOpt = PlaceDown
 
 someFunc :: IO ()
 someFunc =  do
   args <- getArgs
-  let file = case args of
-               []    -> defaulFile
-               (x:_) -> x
+  let (file, placeOpt) = case args of
+               []         -> (defaulFile, defaultPlaceOpt)
+               [x]        -> (x, defaultPlaceOpt)
+               ("PD":x:_) -> (x, PlaceDown)
+               ("NP":x:_) -> (x, NoPlace)
   layers <- parseLayers 0 <$> readFile file
-  let initPoint = zeroPoint { pointY = (getMinY layers) }
+  let initPoint = zeroPoint { pointY = getMinY layers }
   putStrLn
     $ flip printActions 0
     . robotActions
@@ -203,4 +211,4 @@ someFunc =  do
     . move initPoint
     . move initPoint {pointX = pointX initPoint - 1}
     . printLayers layers
-    $ newRobot initPoint
+    $ newRobot placeOpt initPoint
