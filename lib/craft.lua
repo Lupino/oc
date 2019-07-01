@@ -30,7 +30,7 @@ end
 
 function getSideItemName(side, slot)
     if ic then
-        local item = ic.getStackInSlot(slot)
+        local item = ic.getStackInSlot(side, slot)
         if item then
             return item.name
         end
