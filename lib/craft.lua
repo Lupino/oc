@@ -93,6 +93,7 @@ function suckFromSlot(side, slot)
         if newSlot > 0 then
             robot.select(newSlot)
             ic.suckFromSlot(side, slot)
+            insertSideEmptySlots(side, slot)
             return newSlot
         end
     end
@@ -421,15 +422,16 @@ end
 
 function scanSideItems(side)
     sideItems[side] = {}
+    sideEmptySlots[side] = {}
     if ic then
         local max = ic.getInventorySize(side)
         if max then
             for slot = 1, max, 1 do
                 if isEmptySideSlot(side, slot) then
+                    insertSideEmptySlots(side, slot)
+                else
                     local name = getSideItemName(side, slot)
                     insertSideItems(side, slot, name)
-                else
-                    insertSideEmptySlots(side, slot)
                 end
             end
         end
