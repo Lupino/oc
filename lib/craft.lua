@@ -9,6 +9,7 @@ local valid_sides = {sides.bottom, sides.top, sides.front}
 
 -- local innerItems = {}
 local sideItems = {}
+local sideEmptySlots = {}
 
 local useSideItems = false
 
@@ -67,7 +68,7 @@ function findItemOnSides(itemName)
     for k, side in pairs(valid_sides) do
         if useSideItems then
             local slot = popSideItems(side, itemName)
-            if slot > 0 then
+            if slot then
                 if isSideItem(side, slot, itemName) then
                     return suckFromSlot(side, slot)
                 end
@@ -180,9 +181,18 @@ end
 
 function findEmptySlotOnSides()
     for k, side in pairs(valid_sides) do
-        local slot = findEmptySideSlot(side)
-        if slot > 0 then
-            return side, slot
+        if useSideItems then
+            local slot = popSideEmptySlot(side)
+            if slot then
+                if isEmptySideSlot(side, slot) then
+                    return side, slot
+                end
+            end
+        else
+            local slot = findEmptySideSlot(side)
+            if slot > 0 then
+                return side, slot
+            end
         end
     end
     return 0, 0
@@ -384,6 +394,13 @@ function insertSideItems(side, slot, name)
     end
 end
 
+function insertSideEmptySlots(side, slot)
+    print('insertSideEmptySlots', side, slot)
+    if sideEmptySlots[side] then
+        table.insert(sideEmptySlots[side], slot)
+    end
+end
+
 function popSideItems(side, name)
     print('popSideItems', side, name)
     if sideItems[side] then
@@ -391,7 +408,15 @@ function popSideItems(side, name)
             return table.remove(sideItems[side][name])
         end
     end
-    return 0
+    return nil
+end
+
+function popSideEmptySlot(side)
+    print('popSideEmptySlot')
+    if (sideEmptySlots[side]) then
+        return table.remove(sideEmptySlots[side])
+    end
+    return nil
 end
 
 function scanSideItems(side)
@@ -400,9 +425,11 @@ function scanSideItems(side)
         local max = ic.getInventorySize(side)
         if max then
             for slot = 1, max, 1 do
-                if not isEmptySideSlot(side, slot) then
+                if isEmptySideSlot(side, slot) then
                     local name = getSideItemName(side, slot)
                     insertSideItems(side, slot, name)
+                else
+                    insertSideEmptySlots(side, slot)
                 end
             end
         end
