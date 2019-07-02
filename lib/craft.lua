@@ -7,6 +7,11 @@ local maxSlot = robot.inventorySize()
 local craftTable = {1, 2, 3, 5, 6, 7, 9, 10, 11}
 local valid_sides = {sides.bottom, sides.top, sides.front}
 
+-- local innerItems = {}
+local sideItems = {}
+
+local useSideItems = false
+
 local ic = nil
 if component.isAvailable("inventory_controller") then
     ic = component.inventory_controller
@@ -60,9 +65,18 @@ end
 
 function findItemOnSides(itemName)
     for k, side in pairs(valid_sides) do
-        local slot = findSideItem(side, itemName)
-        if slot > 0 then
-            return suckFromSlot(side, slot)
+        if useSideItems then
+            local slot = popSideItems(side, itemName)
+            if slot > 0 then
+                if isSideItem(side, slot, itemName) then
+                    return suckFromSlot(side, slot)
+                end
+            end
+        else
+            local slot = findSideItem(side, itemName)
+            if slot > 0 then
+                return suckFromSlot(side, slot)
+            end
         end
     end
     return 0
@@ -89,9 +103,11 @@ function dropIntoSlot(slot)
     print('dropIntoSlot', slot)
     if ic then
         robot.select(slot)
+        local name = getItemName(slot)
         local side, newSlot = findEmptySlotOnSides()
         if newSlot > 0 then
             ic.dropIntoSlot(side, newSlot)
+            insertSideItems(side, newSlot, name)
             return true
         end
     end
@@ -344,6 +360,62 @@ function crafting9(name)
     return true
 end
 
+-- function scanInnerItems()
+--     for slot = 1, maxSlot, 1 do
+--         if not isEmptySlot(slot) then
+--             local name = getItemName(slot)
+--             if innerItems[name] then
+--                 table.insert(innerItems[name], slot)
+--             else
+--                 innerItems[name] = {slot}
+--             end
+--         end
+--     end
+-- end
+
+function insertSideItems(side, slot, name)
+    print('insertSideItems', side, slot, name)
+    if sideItems[side] then
+        if sideItems[side][name] then
+            table.insert(sideItems[side][name], slot)
+        else
+            sideItems[side][name] = {slot}
+        end
+    end
+end
+
+function popSideItems(side, name)
+    print('popSideItems', side, name)
+    if sideItems[side] then
+        if sideItems[side][name] then
+            return table.remove(sideItems[side][name])
+        end
+    end
+    return 0
+end
+
+function scanSideItems(side)
+    sideItems[side] = {}
+    if ic then
+        local max = ic.getInventorySize(side)
+        if max then
+            for slot = 1, max, 1 do
+                if not isEmptySideSlot(side, slot) then
+                    local name = getSideItemName(side, slot)
+                    insertSideItems(side, slot, name)
+                end
+            end
+        end
+    end
+end
+
+function scanItemsOnSides()
+    for k, side in pairs(valid_sides) do
+        scanSideItems(side)
+    end
+    useSideItems = true
+end
+
 craft.getItemName = getItemName
 craft.findItem = findItem
 craft.findItemOnSides = findItemOnSides
@@ -351,5 +423,6 @@ craft.isItem = isItem
 craft.mergeItems = mergeItems
 craft.crafting1 = crafting1
 craft.crafting9 = crafting9
+craft.scanItemsOnSides = scanItemsOnSides
 
 return craft

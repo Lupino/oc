@@ -77,6 +77,7 @@ function runPlaceDye()
 end
 
 function main()
+    craft.scanItemsOnSides()
     robot.swingDown()
     local running = true
     if seed == '' then
