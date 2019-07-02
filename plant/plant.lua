@@ -31,7 +31,10 @@ function placeSeed()
     end
     local slot = craft.findItem(seed, 1)
     if slot == 0 then
-        return false
+        slot = craft.findItemOnSides(seed)
+        if slot == 0 then
+            return false
+        end
     end
     currentSeedSlot = slot
     return placeSeed()
@@ -47,7 +50,10 @@ function placeDye()
     end
     local slot = craft.findItem(dye, 1)
     if slot == 0 then
-        return 2
+        slot = craft.findItemOnSides(dye)
+        if slot == 0 then
+            return 2
+        end
     end
     currentDyeSlot = slot
     return placeDye()

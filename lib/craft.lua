@@ -29,6 +29,7 @@ function isItem(slot, name)
 end
 
 function getSideItemName(side, slot)
+    print('getSideItemName', side, slot)
     if ic then
         local item = ic.getStackInSlot(side, slot)
         if item then
@@ -43,6 +44,7 @@ function isSideItem(side, slot, name)
 end
 
 function findSideItem(side, itemName)
+    print('findSideItem', side, itemName)
     if ic then
         local max = ic.getInventorySize(side)
         if max then
@@ -84,6 +86,7 @@ end
 
 
 function dropIntoSlot(slot)
+    print('dropIntoSlot', slot)
     if ic then
         robot.select(slot)
         local side, newSlot = findEmptySlotOnSides()
@@ -106,6 +109,7 @@ function findItem(itemName, slot)
 end
 
 function findEmptySlot()
+    print('findEmptySlot')
     if isEmptySlot(4) then
         return 4
     end
@@ -130,6 +134,7 @@ function isEmptySlot(slot)
 end
 
 function findEmptySideSlot(side)
+    print('findEmptySideSlot', side)
     if ic then
         local max = ic.getInventorySize(side)
         if max then
@@ -168,6 +173,7 @@ function findEmptySlotOnSides()
 end
 
 function cleanASlot()
+    print('cleanASlot')
     for slot = 12, maxSlot, 1 do
         if isFullSlot(slot) then
             if dropIntoSlot(slot) then
@@ -189,6 +195,7 @@ function isFullSlot(slot)
 end
 
 function transferTo(from, to, ...)
+    print('transferTo', from, to, ...)
     robot.select(from)
     robot.transferTo(to, ...)
 end
