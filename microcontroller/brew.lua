@@ -9,6 +9,7 @@ local collect_state = false
 local brew_delay = 24
 local collect_delay = 22
 
+local brew_pin = 4
 local collect_pin = 5
 
 redstone.setOutput(brew_pin, 15)
