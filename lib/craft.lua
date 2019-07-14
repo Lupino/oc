@@ -373,7 +373,7 @@ end
 
 function crafting_db(items)
     print('crafting_db')
-    if #items != 9 then
+    if #items ~= 9 then
         print('crafting_db failed', #items)
         return false, ''
     end
