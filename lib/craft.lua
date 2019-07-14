@@ -347,22 +347,34 @@ function crafting9(name)
     end
     local slot = 0
     local count = 0
+    local total = 0
     while true do
         slot = findItem(name, slot + 1)
         if slot == 0 then
             slot = findItemOnSides(name)
             if slot == 0 then
-                return false
+                if total >= 9 then
+                    break
+                else
+                    return false
+                end
             end
         end
         count = robot.count(slot)
+        total = total + count
         if count >= 9 then
             break
         end
     end
 
     if count < 9 then
-        return false
+        if total >= 9 then
+            mergeItems()
+            slot = findItem(name, 0)
+            count = robot.count(slot)
+        else
+            return false
+        end
     end
 
     count = math.floor(count / 9)
@@ -411,6 +423,7 @@ function crafting(items, ...)
     local s
     local slot = 0
     local count = 0
+    local total = 0
     local minCount = 64
     for name, ss in pairs(itemSlots) do
         slot = 0
@@ -419,17 +432,28 @@ function crafting(items, ...)
             if slot == 0 then
                 slot = findItemOnSides(name)
                 if slot == 0 then
-                    return false, name, #ss
+                    if total >= #ss then
+                        break
+                    else
+                        return false, name, (#ss - total)
+                    end
                 end
             end
             count = robot.count(slot)
+            total = total + count
             if count >= #ss then
                 break
             end
         end
 
         if count < #ss then
-            return false, name, (#ss - count)
+            if total > #ss then
+                mergeItems()
+                slot = findItem(name, 0)
+                count = robot.count(slot)
+            else
+                return false, name, (#ss - total)
+            end
         end
 
         count = math.floor(count / #ss)
@@ -535,6 +559,29 @@ function scanItemsOnSides()
     useSideItems = true
 end
 
+function countItems(name)
+    local slot
+    local total = 0
+    for slot = 1, maxSlot, 1 do
+        if isItem(slot, name) then
+            total = total + robot.count(slot)
+        end
+    end
+    for k, side in pairs(valid_sides) do
+        if ic then
+            local max = ic.getInventorySize(side)
+            if max then
+                for slot = 1, max, 1 do
+                    if isSideItem(side, slot, name) then
+                        total = total + ic.getSlotStackSize(side, slot)
+                    end
+                end
+            end
+        end
+    end
+    return total
+end
+
 craft.getItemName = getItemName
 craft.findItem = findItem
 craft.findItemOnSides = findItemOnSides
@@ -545,5 +592,6 @@ craft.crafting1 = crafting1
 craft.crafting9 = crafting9
 craft.crafting = crafting
 craft.scanItemsOnSides = scanItemsOnSides
+craft.countItems = countItems
 
 return craft

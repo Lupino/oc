@@ -25,10 +25,10 @@ function run_craft(name, count)
 end
 
 function main()
-    craft.scanItemsOnSides()
     local target
     local count = 1
-    local k
+    local total = 1
+    local size = 64
     local running = true
     if #args == 2 then
         target = args[1]
@@ -42,16 +42,25 @@ function main()
 
     craft.cleanAll()
 
+    count = count + 1
+
+    craft.scanItemsOnSides()
+
     while running do
-        if count > 64 then
-            running = run_craft(target, 64)
-            if not running then
-                craft.cleanAll()
-                running = run_craft(target, 64)
-            end
-            count = count - 64
-        else
-            run_craft(target, count)
+        size = count - total
+        if (count - total) > 64 then
+            size = 64
+        end
+
+        running = run_craft(target, size)
+        if not running then
+            craft.cleanAll()
+            running = run_craft(target, size)
+        end
+
+        total = craft.countItems(target)
+
+        if total >= count then
             break
         end
     end
