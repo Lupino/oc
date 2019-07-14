@@ -21,8 +21,8 @@ function main()
     for slot = 1, 9, 1 do
         items1[slot] = getDbItemName(slot)
     end
-    for slot = 11, 19, 1 do
-        items2[slot] = getDbItemName(slot)
+    for slot = 1, 9, 1 do
+        items2[slot] = getDbItemName(slot + 10)
     end
     craft.scanItemsOnSides()
     local ret
