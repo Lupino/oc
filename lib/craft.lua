@@ -212,6 +212,18 @@ function cleanASlot()
     return 0
 end
 
+function cleanAll()
+    print('cleanAll')
+    mergeItems()
+    for slot = 1, maxSlot, 1 do
+        if not isEmptySlot(slot) then
+            if not dropIntoSlot(slot) then
+                break
+            end
+        end
+    end
+end
+
 function isFullSlot(slot)
     local count = robot.count(slot)
     if count == 64 then
@@ -528,6 +540,7 @@ craft.findItem = findItem
 craft.findItemOnSides = findItemOnSides
 craft.isItem = isItem
 craft.mergeItems = mergeItems
+craft.cleanAll = cleanAll
 craft.crafting1 = crafting1
 craft.crafting9 = crafting9
 craft.crafting = crafting

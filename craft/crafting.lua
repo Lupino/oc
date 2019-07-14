@@ -17,6 +17,12 @@ function run_craft(name, count)
         ret = run_craft(needName, needCount)
         if ret then
             return run_craft(name, count)
+        else
+            craft.cleanAll()
+            ret = run_craft(needName, needCount)
+            if ret then
+                return run_craft(name, count)
+            end
         end
     end
     return false
