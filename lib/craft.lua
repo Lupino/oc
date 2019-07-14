@@ -371,6 +371,78 @@ function crafting9(name)
     return true
 end
 
+function crafting_db(items)
+    print('crafting_db')
+    if #items != 9 then
+        print('crafting_db failed', #items)
+        return false, ''
+    end
+
+    if not makeCraft() then
+        return false, ''
+    end
+
+    local itemSlots = {}
+    local slot
+    for slot = 1, 9, 1 do
+        if itemSlots[items[slot]] then
+            table.insert(itemSlots[items[slot]], slot)
+        else
+            if items[slot] ~= '' then
+                itemSlots[items[slot]] = {slot}
+            end
+        end
+    end
+
+    local name
+    local ss
+    local s
+    local slot = 0
+    local count = 0
+    local minCount = 64
+    for name, ss in pairs(itemSlots) do
+        slot = 0
+        while true do
+            slot = findItem(name, slot + 1)
+            if slot == 0 then
+                slot = findItemOnSides(name)
+                if slot == 0 then
+                    return false, name
+                end
+            end
+            count = robot.count(slot)
+            if count >= #ss then
+                break
+            end
+        end
+
+        if count < #ss then
+            return false, name
+        end
+
+        count = math.floor(count / #ss)
+
+        for s = 1, #ss, 1 do
+            transferTo(slot, craftTable[ss[s]], count)
+        end
+
+        if minCount > count then
+            minCount = count
+        end
+    end
+
+    local emptySlot = findEmptySlot()
+    if emptySlot == 0 then
+        emptySlot = cleanASlot()
+        if emptySlot == 0 then
+            return false, ''
+        end
+    end
+    robot.select(emptySlot)
+    component.crafting.craft(minCount)
+    return true, ''
+end
+
 -- function scanInnerItems()
 --     for slot = 1, maxSlot, 1 do
 --         if not isEmptySlot(slot) then
@@ -452,6 +524,7 @@ craft.isItem = isItem
 craft.mergeItems = mergeItems
 craft.crafting1 = crafting1
 craft.crafting9 = crafting9
+craft.crafting_db = crafting_db
 craft.scanItemsOnSides = scanItemsOnSides
 
 return craft

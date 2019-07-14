@@ -79,12 +79,11 @@ end
 function main()
     craft.scanItemsOnSides()
     robot.swingDown()
-    local running = true
     if seed == '' then
         print('Error: seed not found.')
         return
     end
-    while running do
+    while true do
         if not placeSeed() then
             break
         end
