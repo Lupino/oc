@@ -1,5 +1,6 @@
 local craft = require('craft')
 local craftTables = require('craftTables')
+local shell = require("shell")
 local args, opts = shell.parse(...)
 
 function run_craft(name, count)
