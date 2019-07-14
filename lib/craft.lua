@@ -371,15 +371,15 @@ function crafting9(name)
     return true
 end
 
-function crafting_db(items)
-    print('crafting_db')
+function crafting(items, ...)
+    print('crafting')
     if #items ~= 9 then
-        print('crafting_db failed', #items)
-        return false, ''
+        print('crafting failed', #items)
+        return false, '', 0
     end
 
     if not makeCraft() then
-        return false, ''
+        return false, '', 0
     end
 
     local itemSlots = {}
@@ -407,7 +407,7 @@ function crafting_db(items)
             if slot == 0 then
                 slot = findItemOnSides(name)
                 if slot == 0 then
-                    return false, name
+                    return false, name, #ss
                 end
             end
             count = robot.count(slot)
@@ -417,7 +417,7 @@ function crafting_db(items)
         end
 
         if count < #ss then
-            return false, name
+            return false, name, (#ss - count)
         end
 
         count = math.floor(count / #ss)
@@ -435,12 +435,18 @@ function crafting_db(items)
     if emptySlot == 0 then
         emptySlot = cleanASlot()
         if emptySlot == 0 then
-            return false, ''
+            return false, '', 0
         end
     end
+
     robot.select(emptySlot)
+
+    local args = {...}
+    if #args > 0 then
+        minCount = args[1]
+    end
     component.crafting.craft(minCount)
-    return true, ''
+    return true, '', 0
 end
 
 -- function scanInnerItems()
@@ -524,7 +530,7 @@ craft.isItem = isItem
 craft.mergeItems = mergeItems
 craft.crafting1 = crafting1
 craft.crafting9 = crafting9
-craft.crafting_db = crafting_db
+craft.crafting = crafting
 craft.scanItemsOnSides = scanItemsOnSides
 
 return craft

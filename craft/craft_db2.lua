@@ -27,11 +27,12 @@ function main()
     craft.scanItemsOnSides()
     local ret
     local name
+    local needCount
     local running = true
     while running do
         craft.mergeItems()
 
-        ret, name = craft.crafting_db(items1)
+        ret, name, needCount = craft.crafting(items1)
         if not ret then
             if name ~= '' then
                 print('lack item:', name)
@@ -40,7 +41,7 @@ function main()
         end
         while running do
             craft.mergeItems()
-            ret, name = craft.crafting_db(items2)
+            ret, name, needCount = craft.crafting(items2)
             if not ret then
                 if name ~= '' then
                     print('lack item:', name)
