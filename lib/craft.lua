@@ -24,7 +24,7 @@ function getItemName(slot)
     if ic then
         local item = ic.getStackInInternalSlot(slot)
         if item then
-            return item.name
+            return item.label
         end
     end
     return ''
@@ -39,7 +39,7 @@ function getSideItemName(side, slot)
     if ic then
         local item = ic.getStackInSlot(side, slot)
         if item then
-            return item.name
+            return item.label
         end
     end
     return ''
