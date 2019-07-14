@@ -2,10 +2,10 @@ local robot = require('robot')
 local component = require('component')
 local craft = require('craft')
 
-local dye = 'minecraft:dye'
-local bone = 'minecraft:bone'
-local boneBlock = 'minecraft:bone_block'
-local fruitBone = 'croparia:fruit_bone'
+local dye = 'Bone Meal'
+local bone = 'Bone'
+local boneBlock = 'Bone Block'
+local fruitBone = 'Boneus Fruit'
 local currentDyeSlot = 2
 local currentSeedSlot = 1
 
