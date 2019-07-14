@@ -1,6 +1,6 @@
 local craft = require('craft')
 local craftTables = require('craftTables')
-local shell = require("shell")
+local shell = require('shell')
 local args, opts = shell.parse(...)
 
 function run_craft(name, count)
@@ -9,6 +9,7 @@ function run_craft(name, count)
         print('not fount craftable:', name)
         return false
     end
+    craft.mergeItems()
     local ret, needName, needCount = craft.crafting(craftTables[name], count)
     if ret then
         return true
@@ -18,12 +19,6 @@ function run_craft(name, count)
         ret = run_craft(needName, needCount)
         if ret then
             return run_craft(name, count)
-        else
-            craft.cleanAll()
-            ret = run_craft(needName, needCount)
-            if ret then
-                return run_craft(name, count)
-            end
         end
     end
     return false
@@ -45,9 +40,15 @@ function main()
         target = craft.getItemName(1)
     end
 
+    craft.cleanAll()
+
     while running do
         if count > 64 then
             running = run_craft(target, 64)
+            if not running then
+                craft.cleanAll()
+                running = run_craft(target, 64)
+            end
             count = count - 64
         else
             run_craft(target, count)
