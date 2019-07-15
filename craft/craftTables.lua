@@ -43,5 +43,22 @@ craftTables["Inventory Controller Upgrade"] = {"Gold Ingot", "Analyzer", "Gold I
 craftTables["Generator Upgrade"] = {"Iron Ingot", "", "Iron Ingot", "Microchip (Tier 1)", "Piston", "Microchip (Tier 1)", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"}
 craftTables["Interweb"] = {"String", "String", "String", "String", "Ender Pearl", "String", "String", "String", "String"}
 craftTables["Internet Card"] = {"", "", "", "Interweb", "Microchip (Tier 2)", "Redstone Torch", "", "Card Base", "Obsidian"}
-
+craftTables["Chamelium"] = {"Gravel", "Redstone", "Gravel", "Redstone", "Charcoal", "Redstone", "Gravel", "Water Bucket", "Gravel"}
+craftTables["Wireless Network Card (Tier 2)"] = {"", "", "", "Ender Pearl", "Microchip (Tier 2)", "", "", "Card Base", ""}
+craftTables["Memory (Tier 1)"] = {"", "", "", "Microchip (Tier 1)", "Iron Nugget", "Microchip (Tier 1)", "", "Printed Circuit Board (PCB)", ""}
+craftTables["Capacitor"] = {"Iron Ingot", "Transistor", "Iron Ingot", "Gold Nugget", "Paper", "Gold Nugget", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"}
+craftTables["Grog"] = {"Water Bucket", "Sugar", "Slimeball", "Fermented Spider Eye", "Bone", "", "", "", ""}
+craftTables["Fermented Spider Eye"] = {"Spider Eye", "Mushroom", "", "Sugar", "", "", "", "", ""}
+craftTables["Central Processing Unit (CPU) (Tier 1)"] = {"Iron Nugget", "Redstone", "Iron Nugget", "Microchip (Tier 1)", "Control Unit (CU)", "Microchip (Tier 1)", "Iron Nugget", "Arithmetic Logic Unit (ALU)", "Iron Nugget"}
+craftTables["Central Processing Unit (CPU) (Tier 2)"] = {"Gold Nugget", "Redstone", "Gold Nugget", "Microchip (Tier 2)", "Control Unit (CU)", "Microchip (Tier 2)", "Gold Nugget", "Arithmetic Logic Unit (ALU)", "Gold Nugget"}
+craftTables["Nanomachines"] = {"Chamelium", "Wireless Network Card (Tier 2)", "Chamelium", "Central Processing Unit (CPU) (Tier 2)", "Grog", "Memory (Tier 1)", "Chamelium", "Capacitor", "Chamelium"}
+craftTables["Battery Upgrade (Tier 1)"] = {"Iron Nugget", "Gold Nugget", "Iron Nugget", "Iron Bars", "Capacitor", "Iron Bars", "Iron Nugget", "Gold Nugget", "Iron Nugget"}
+craftTables["Component Bus (Tier 3)"] = {"Diamond Chip", "Redstone", "Diamond Chip", "Microchip (Tier 3)", "Control Unit (CU)", "", "Diamond Chip", "Printed Circuit Board (PCB)", "Diamond Chip"}
+craftTables["Tablet Case (Tier 2)"] = {"Microchip (Tier 2)", "Button", "Gold Ingot", "Component Bus (Tier 3)", "Screen (Tier 2)", "Microchip (Tier 3)", "Microchip (Tier 2)", "Printed Circuit Board (PCB)", "Gold Ingot"}
+craftTables["Memory (Tier 1)"] = {"", "", "", "Microchip (Tier 1)", "Iron Nugget", "Microchip (Tier 1)", "", "Printed Circuit Board (PCB)", ""}
+craftTables["Graphics Card (Tier 1)"] = {"", "", "", "Microchip (Tier 1)", "Arithmetic Logic Unit (ALU)", "Memory (Tier 1)", "", "Card Base", ""}
+craftTables["Component Bus (Tier 1)"] = {"Iron Nugget", "Redstone", "Iron Nugget", "Microchip (Tier 1)", "Control Unit (CU)", "", "Iron Nugget", "Printed Circuit Board (PCB)", "Iron Nugget"}
+craftTables["Accelerated Processing Unit (APU) (Tier 1)"] = {"Gold Nugget", "Microchip (Tier 1)", "Gold Nugget", "Central Processing Unit (CPU) (Tier 2)", "Component Bus (Tier 1)", "Graphics Card (Tier 1)", "Gold Nugget", "Microchip (Tier 1)", "Gold Nugget"}
+craftTables["Memory (Tier 1.5)"] = {"", "", "", "Microchip (Tier 1)", "Microchip (Tier 2)", "Microchip (Tier 1)", "", "Printed Circuit Board (PCB)", ""}
+craftTables["Memory (Tier 2.5)"] = {"", "", "", "Microchip (Tier 2)", "Microchip (Tier 3)", "Microchip (Tier 2)", "", "Printed Circuit Board (PCB)", ""}
 return craftTables
