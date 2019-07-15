@@ -435,6 +435,7 @@ function crafting(items, ...)
     local minCount = 64
     for name, ss in pairs(itemSlots) do
         slot = 0
+        total = 0
         while true do
             slot = findItem(name, slot + 1)
             if slot == 0 then
@@ -581,13 +582,24 @@ function countItems(name)
             total = total + robot.count(slot)
         end
     end
-    for k, side in pairs(valid_sides) do
-        if ic then
-            local max = ic.getInventorySize(side)
-            if max then
-                for slot = 1, max, 1 do
-                    if isSideItem(side, slot, name) then
-                        total = total + ic.getSlotStackSize(side, slot)
+    if useSideItems then
+        for side, item in pairs(sideItems) do
+            if item[name] then
+                local ss = item[name]
+                for k = 1, #ss, 1 do
+                    total = total + ic.getSlotStackSize(side, ss[k])
+                end
+            end
+        end
+    else
+        for k, side in pairs(valid_sides) do
+            if ic then
+                local max = ic.getInventorySize(side)
+                if max then
+                    for slot = 1, max, 1 do
+                        if isSideItem(side, slot, name) then
+                            total = total + ic.getSlotStackSize(side, slot)
+                        end
                     end
                 end
             end
