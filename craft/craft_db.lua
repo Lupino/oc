@@ -5,7 +5,7 @@ local db = component.database
 function getDbItemName(slot)
     local item = db.get(slot)
     if item then
-        return item.name
+        return item.label
     else
         return ''
     end
