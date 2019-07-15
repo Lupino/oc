@@ -345,20 +345,15 @@ function crafting9(name)
     if not makeCraft() then
         return false
     end
+
     local slot = 0
     local count = 0
     local total = 0
+
     while true do
         slot = findItem(name, slot + 1)
         if slot == 0 then
-            slot = findItemOnSides(name)
-            if slot == 0 then
-                if total >= 9 then
-                    break
-                else
-                    return false
-                end
-            end
+            break
         end
         count = robot.count(slot)
         total = total + count
@@ -367,17 +362,27 @@ function crafting9(name)
         end
     end
 
-    if count < 9 then
-        if total >= 9 then
-            mergeItems()
-            slot = findItem(name, 1)
+    if slot == 0 then
+        while true do
+            slot = findItemOnSides(name)
             if slot == 0 then
-                return false
+                if total >= 9 then
+                    mergeItems()
+                    return crafting9(name)
+                else
+                    return false
+                end
             end
             count = robot.count(slot)
-        else
-            return false
+            total = total + count
+            if count >= 9 then
+                break
+            end
         end
+    end
+
+    if count < 9 then
+        return false
     end
 
     count = math.floor(count / 9)
@@ -433,14 +438,7 @@ function crafting(items, ...)
         while true do
             slot = findItem(name, slot + 1)
             if slot == 0 then
-                slot = findItemOnSides(name)
-                if slot == 0 then
-                    if total >= #ss then
-                        break
-                    else
-                        return false, name, (#ss - total)
-                    end
-                end
+                break
             end
             count = robot.count(slot)
             total = total + count
@@ -449,17 +447,27 @@ function crafting(items, ...)
             end
         end
 
-        if count < #ss then
-            if total >= #ss then
-                mergeItems()
-                slot = findItem(name, 1)
+        if slot == 0 then
+            while true do
+                slot = findItemOnSides(name)
                 if slot == 0 then
-                    return false, name, #ss
+                    if total >= #ss then
+                        mergeItems()
+                        return crafting(items, ...)
+                    else
+                        return false, name, (#ss - total)
+                    end
                 end
                 count = robot.count(slot)
-            else
-                return false, name, (#ss - total)
+                total = total + count
+                if count >= #ss then
+                    break
+                end
             end
+        end
+
+        if count < #ss then
+            return false, name, (#ss - total)
         end
 
         count = math.floor(count / #ss)

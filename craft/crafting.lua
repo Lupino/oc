@@ -49,7 +49,7 @@ function main()
 
     while running do
         size = count - total
-        if (count - total) > 64 then
+        if size > 64 then
             size = 64
         end
 
@@ -57,6 +57,9 @@ function main()
         if not running then
             craft.cleanAll()
             running = run_craft(target, size)
+            if running then
+                break
+            end
         end
 
         total = craft.countItems(target)
