@@ -33,6 +33,7 @@ function main()
     if #args == 2 then
         target = args[1]
         count = tonumber(args[2])
+        total = 0
     elseif #args == 1 then
         target = craft.getItemName(1)
         count = tonumber(args[1])
@@ -42,7 +43,7 @@ function main()
 
     craft.cleanAll()
 
-    count = count + 1
+    count = count + total
 
     craft.scanItemsOnSides()
 

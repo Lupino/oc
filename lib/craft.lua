@@ -370,7 +370,7 @@ function crafting9(name)
     if count < 9 then
         if total >= 9 then
             mergeItems()
-            slot = findItem(name, 0)
+            slot = findItem(name, 1)
             count = robot.count(slot)
         else
             return false
@@ -449,7 +449,7 @@ function crafting(items, ...)
         if count < #ss then
             if total > #ss then
                 mergeItems()
-                slot = findItem(name, 0)
+                slot = findItem(name, 1)
                 count = robot.count(slot)
             else
                 return false, name, (#ss - total)
