@@ -57,7 +57,7 @@ function main()
         if not running then
             craft.cleanAll()
             running = run_craft(target, size)
-            if running then
+            if not running then
                 break
             end
         end
