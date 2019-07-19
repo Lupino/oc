@@ -1,7 +1,60 @@
 local craft = require('craft')
 local craftTables = require('craftTables')
-local shell = require('shell')
-local args, opts = shell.parse(...)
+local component = require('component')
+local args = {..}
+
+local dbs
+function refreshDbs()
+  dbs = {}
+  local i = 0
+  for addr, dummy in component.list("database") do
+    i = i + 1
+    local temp = component.proxy(addr)
+    local x1 = pcall(function() temp.get(10) end)
+    local x2 = pcall(function() temp.get(26) end)
+    local dbsize = 9
+    if (x1 and x2) then
+      dbsize = 81
+    elseif x1 then
+      dbsize = 25
+    end
+    dbs[i] = {db=temp, size=dbsize}
+  end
+end
+
+function getDbItemName(db, slot)
+    local item = db.get(slot)
+    if item then
+        return item.label
+    else
+        return ''
+    end
+end
+
+function makeCraftTable(db, offset)
+    local target = getDbItemName(db, 10 + offset)
+
+    if target == '' then
+        return
+    end
+
+    local craftTable = {}
+    local slot
+    for slot = 1, 9, 1 do
+        craftTable[slot] = getDbItemName(db, slot + offset)
+    end
+    craftTables[target] = craftTable
+end
+
+refreshDbs()
+
+for i = 1, #dbs, 1 do
+    local db = dbs[i]
+    if db.size == 25 then
+        makeCraftTable(db.db, 0)
+        makeCraftTable(db.db, 10)
+    end
+end
 
 function run_craft(name, count)
     print('run_craft', name, count)
