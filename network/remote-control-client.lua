@@ -1,7 +1,7 @@
 local internet = require("internet")
 local handle = internet.open("example.com", 18090)
 local computer = require("computer")
-local serialization = require('serialization')
+-- local serialization = require('serialization')
 
 local maxMsgid = 65536
 local maxLength = 32767
@@ -9,7 +9,7 @@ local maxLength = 32767
 function pack(msgid, data)
     print('pack', msgid, data)
     msgid = msgid % maxMsgid
-    data = serialization.serialize(data)
+    -- data = serialization.serialize(data)
     local length = #data + 2
     if length > maxLength then
         print('payload is to large ignore.')
