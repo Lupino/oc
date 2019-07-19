@@ -414,6 +414,11 @@ function crafting(items, ...)
         return false, '', 0
     end
 
+    local args = {...}
+    local requiredCount = 1
+    if #args > 0 then
+        requiredCount = args[1]
+    end
     local itemSlots = {}
     local slot
     for slot = 1, 9, 1 do
@@ -456,7 +461,7 @@ function crafting(items, ...)
                         mergeItems()
                         return crafting(items, ...)
                     else
-                        return false, name, (#ss - total)
+                        return false, name, (#ss - total) * requiredCount
                     end
                 end
                 count = robot.count(slot)
@@ -468,7 +473,7 @@ function crafting(items, ...)
         end
 
         if count < #ss then
-            return false, name, (#ss - total)
+            return false, name, (#ss - total) * requiredCount
         end
 
         count = math.floor(count / #ss)
@@ -492,7 +497,6 @@ function crafting(items, ...)
 
     robot.select(emptySlot)
 
-    local args = {...}
     if #args > 0 then
         minCount = args[1]
     end
