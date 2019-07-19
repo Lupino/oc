@@ -68,4 +68,17 @@ craftTables["Microcontroller Case (Tier 2)"] = {"Gold Nugget", "Microchip (Tier 
 craftTables["Drone Case (Tier 2)"] = {"End Stone", "Compass", "End Stone", "Microchip (Tier 2)", "Microcontroller Case (Tier 2)", "Microchip (Tier 2)", "End Stone", "Component Bus (Tier 3)", "End Stone"}
 craftTables["Compass"] = {"", "Iron Ingot", "", "Iron Ingot", "Redstone", "Iron Ingot", "", "Iron Ingot", ""}
 craftTables["Disk Drive"] = {"Iron Ingot", "Microchip (Tier 1)", "Iron Ingot", "Piston", "Stick", "", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"}
+
+craftTables["Crafting Upgrade"] = {"Iron Ingot", "", "Iron Ingot", "Microchip (Tier 1)", "Crafting Table", "Microchip (Tier 1)", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"}
+
+craftTables["Redstone"] = {"", "", "", "", "Block of Redstone", "", "", "", ""}
+craftTables["EEPROM"] = {"Gold Nugget", "Transistor", "Gold Nugget", "Paper", "Microchip (Tier 1)", "Paper", "Gold Nugget", "Redstone Torch", "Gold Nugget"}
+craftTables["Dropper"] = {"Cobblestone", "Cobblestone", "Cobblestone", "Cobblestone", "", "Cobblestone", "Cobblestone", "Redstone", "Cobblestone"}
+
+craftTables["Twilight Oak Planks"] = {"Twilight Oak Wood", "", "", "", "", "", "", "", ""}
+craftTables["Stick"] = {"Twilight Oak Planks", "", "", "Twilight Oak Planks", "", "", "", "", ""}
+craftTables["Piston"] = {"Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Cobblestone", "Iron Ingot", "Cobblestone", "Cobblestone", "Redstone", "Cobblestone"}
+craftTables["Chest"] = {"Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks"}
+
+craftTables["Crafting Table"] = {"", "", "", "", "Twilight Oak Planks", "Twilight Oak Planks", "", "Twilight Oak Planks", "Twilight Oak Planks"}
 return craftTables
