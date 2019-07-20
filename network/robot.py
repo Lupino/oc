@@ -13,111 +13,67 @@ local serialization = require('serialization')
 return serialization.serialize(computer.uptime())
 ''')
 
-def up():
+def robot_run(func):
     request('''
 local robot = require('robot')
-robot.up()
-return 'true'
-''')
+robot.{}()
+return '{}'
+'''.format(func, func))
+
+def up():
+    robot_run('up')
 
 def down():
-    request('''
-local robot = require('robot')
-robot.down()
-return 'true'
-''')
+    robot_run('down')
 
 def forward():
-    request('''
-local robot = require('robot')
-robot.forward()
-return 'true'
-''')
+    robot_run('forward')
 
 def back():
+    robot_run('back')
+
+def robot_force_run(func):
+    Func = func.capitalize()
+    if func == 'forward':
+        Func = ''
+
     request('''
 local robot = require('robot')
-robot.back()
-return 'true'
-''')
+function {func}()
+    local can, type = robot.detect{Func}()
+    if can then
+        robot.swing{Func}()
+        {func}()
+    else
+        robot.{func}()
+    end
+end
+{func}()
+return '{func}'
+'''.format(func=func, Func=Func))
 
 def force_up():
-    request('''
-local robot = require('robot')
-function up()
-    local can, type = robot.detectUp()
-    if can then
-        robot.swingUp()
-        up()
-    else
-        robot.up()
-    end
-end
-up()
-return 'true'
-''')
+    robot_force_run('up')
 
 def force_down():
-    request('''
-local robot = require('robot')
-function down()
-    local can, type = robot.detectDown()
-    if can then
-        robot.swingDown()
-        down()
-    else
-        robot.down()
-    end
-end
-down()
-return 'true'
-''')
+    robot_force_run('down')
 
 def force_forward():
-    request('''
-local robot = require('robot')
-function forward()
-    local can, type = robot.detect()
-    if can then
-        robot.swing()
-        forward()
-    else
-        robot.forward()
-    end
-end
-forward()
-return 'true'
-''')
+    robot_force_run('forward')
 
 def turn_left():
-    return request('''
-local robot = require('robot')
-robot.turnLeft()
-return 'true'
-''')
-
+    robot_run('turnLeft')
 
 def turn_right():
-    request('''
-local robot = require('robot')
-robot.turnRight()
-return 'true'
-''')
+    robot_run('turnLeft')
 
 def use_down():
-    request('''
-local robot = require('robot')
-robot.useDown()
-return 'true'
-''')
+    robot_run('useDown')
 
-def place_down():
-    place('placeDown')
+def use():
+    robot_run('use')
 
-def place_up():
-    place('placeUp')
-
-def place(func='place'):
+def robot_place(func):
     request('''
 local robot = require("robot")
 local component = require("component")
@@ -125,27 +81,9 @@ local component = require("component")
 local currentSlot = 1
 local maxSlot = robot.inventorySize()
 
-local enableIC = component.isAvailable("inventory_controller")
-
-local itemName = ''
-local ignorePlace = false
-
-function getItemName(slot)
-    if not enableIC then
-        return ''
-    end
-
-    local item = component.inventory_controller.getStackInInternalSlot(slot)
-    if item then
-        return item.name
-    else
-        return ''
-    end
-end
-
 function findItem()
     for s = 1, maxSlot, 1 do
-        if getItemName(s) ~= '' then
+        if robot.count(s) > 0 then
             return s
         end
     end
@@ -153,8 +91,7 @@ function findItem()
 end
 
 function checkSlot()
-    local newItemName = getItemName(currentSlot)
-    if newItemName ~= '' then
+    if robot.count(currentSlot) > 0 then
         robot.select(currentSlot)
         return true
     else
@@ -167,44 +104,30 @@ function checkSlot()
     end
 end
 
-function placeDown()
-    local can, type = robot.detectDown()
+function place{func}()
+    local can, type = robot.detect{func}()
     if can then
-        robot.swingDown()
-        placeDown()
+        robot.swing{func}()
+        place{func}()
     else
         if checkSlot() then
-            robot.placeDown()
+            robot.place{func}()
         end
     end
 end
+place{func}()
+return '{func}'
+'''.format(Func=func))
 
-function placeUp()
-    local can, type = robot.detectUp()
-    if can then
-        robot.swingUp()
-        placeUp()
-    else
-        if checkSlot() then
-            robot.placeUp()
-        end
-    end
-end
+def place_down():
+    robot_place('Down')
 
-function place()
-    local can, type = robot.detect()
-    if can then
-        robot.swing()
-        place()
-    else
-        if checkSlot() then
-            robot.place()
-        end
-    end
-end
-{}()
-return '{}'
-'''.format(func, func))
+def place_up():
+    robot_place('Up')
+
+def place():
+    robot_place('')
+
 
 def upload(data, filename='test.lua'):
     data = ['file:write("{}\\n")'.format(line.replace('"', '\\"')) for line in data.split('\n')]
