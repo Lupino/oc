@@ -75,15 +75,15 @@ craftTables["Redstone"] = {"", "", "", "", "Block of Redstone", "", "", "", ""}
 craftTables["EEPROM"] = {"Gold Nugget", "Transistor", "Gold Nugget", "Paper", "Microchip (Tier 1)", "Paper", "Gold Nugget", "Redstone Torch", "Gold Nugget"}
 craftTables["Dropper"] = {"Cobblestone", "Cobblestone", "Cobblestone", "Cobblestone", "", "Cobblestone", "Cobblestone", "Redstone", "Cobblestone"}
 
-craftTables["Twilight Oak Planks"] = {"Twilight Oak Wood", "", "", "", "", "", "", "", ""}
-craftTables["Stick"] = {"Twilight Oak Planks", "", "", "Twilight Oak Planks", "", "", "", "", ""}
-craftTables["Piston"] = {"Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Cobblestone", "Iron Ingot", "Cobblestone", "Cobblestone", "Redstone", "Cobblestone"}
-craftTables["Chest"] = {"Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks"}
+craftTables["Planks"] = {"Wood", "", "", "", "", "", "", "", ""}
+craftTables["Stick"] = {"Planks", "", "", "Planks", "", "", "", "", ""}
+craftTables["Piston"] = {"Planks", "Planks", "Planks", "Cobblestone", "Iron Ingot", "Cobblestone", "Cobblestone", "Redstone", "Cobblestone"}
+craftTables["Chest"] = {"Planks", "Planks", "Planks", "Planks", "", "Planks", "Planks", "Planks", "Planks"}
 
-craftTables["Crafting Table"] = {"", "", "", "", "Twilight Oak Planks", "Twilight Oak Planks", "", "Twilight Oak Planks", "Twilight Oak Planks"}
+craftTables["Crafting Table"] = {"", "", "", "", "Planks", "Planks", "", "Planks", "Planks"}
 
 craftTables["Hopper"] = {"Iron Ingot", "", "Iron Ingot", "Iron Ingot", "Chest", "Iron Ingot", "", "Iron Ingot", ""}
-craftTables["Inventory Upgrade"] = {"Twilight Oak Planks", "Hopper", "Twilight Oak Planks", "Dropper", "Chest", "Piston", "Twilight Oak Planks", "Microchip (Tier 1)", "Twilight Oak Planks"}
+craftTables["Inventory Upgrade"] = {"Planks", "Hopper", "Planks", "Dropper", "Chest", "Piston", "Planks", "Microchip (Tier 1)", "Planks"}
 craftTables["Cactus Green"] = {"", "", "", "", "Green Dyius Fruit", "", "", "", ""}
 craftTables["minecraft:clay_ball"] = {"", "", "", "", "Claya Fruit", "", "", "", ""}
 craftTables["Gold Ingot"] = {"Block of Gold", "", "", "", "", "", "", "", ""}
@@ -98,5 +98,17 @@ craftTables["Dispenser"] = {"Cobblestone", "Cobblestone", "Cobblestone", "Cobble
 craftTables["Bucket"] = {"", "", "", "Iron Ingot", "", "Iron Ingot", "", "Iron Ingot", ""}
 
 craftTables["Ink Cartridge (Empty)"] = {"Iron Nugget", "Dispenser", "Iron Nugget", "Transistor", "Bucket", "Transistor", "Iron Nugget", "Printed Circuit Board (PCB)", "Iron Nugget"}
+craftTables["Forge Hammer"] = {"", "Iron Ingot", "Iron Ingot", "Stick", "Stick", "Iron Ingot", "", "Iron Ingot", "Iron Ingot"}
+craftTables["Iron Plate"] = {"", "", "", "", "Forge Hammer", "Iron Ingot", "", "", ""}
+craftTables["Cutter"] = {"Iron Plate", "", "Iron Plate", "", "Iron Plate", "", "Iron Ingot", "", "Iron Ingot"}
+craftTables["Tin Plate"] = {"", "", "", "", "Forge Hammer", "Tin Ingot", "", "", ""}
+craftTables["Tin Cable"] = {"", "", "", "", "Cutter", "Tin Plate", "", "", ""}
+
+craftTables["Insulated Tin Cable"] = {"", "", "", "", "Tin Cable", "Rubber", "", "", ""}
+craftTables["Tin Item Casing"] = {"", "", "", "", "Forge Hammer", "Tin Plate", "", "", ""}
+craftTables["RE-Battery"] = {"", "Insulated Tin Cable", "", "Tin Item Casing", "Redstone", "Tin Item Casing", "Tin Item Casing", "Redstone", "Tin Item Casing"}
+craftTables["Furnace"] = {"Cobblestone", "Cobblestone", "Cobblestone", "Cobblestone", "", "Cobblestone", "Cobblestone", "Cobblestone", "Cobblestone"}
+craftTables["Basic Machine Casing"] = {"Iron Plate", "Iron Plate", "Iron Plate", "Iron Plate", "", "Iron Plate", "Iron Plate", "Iron Plate", "Iron Plate"}
+craftTables["Generator"] = {"", "RE-Battery", "", "", "Basic Machine Casing", "", "", "Furnace", ""}
 
 return craftTables
