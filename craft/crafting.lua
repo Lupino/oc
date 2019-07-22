@@ -46,6 +46,42 @@ function makeCraftTable(db, offset)
     craftTables[target] = craftTable
 end
 
+function makeCraftTable1(db, offset)
+    local target = getDbItemName(db, 13 + offset)
+
+    if target == '' then
+        return
+    end
+
+    local slots = {1, 2, 3, 10, 11, 12, 19, 20, 21}
+    local craftTable = {}
+    local slot
+    local s
+    for s = 1, 9, 1 do
+        slot = slots[s]
+        craftTable[s] = getDbItemName(db, slot + offset)
+    end
+    craftTables[target] = craftTable
+end
+
+function makeCraftTable2(db, offset)
+    local target = getDbItemName(db, 17 + offset)
+
+    if target == '' then
+        return
+    end
+
+    local slots = {5, 6, 7, 14, 15, 16, 23, 24, 25}
+    local craftTable = {}
+    local slot
+    local s
+    for s = 1, 9, 1 do
+        slot = slots[s]
+        craftTable[s] = getDbItemName(db, slot + offset)
+    end
+    craftTables[target] = craftTable
+end
+
 refreshDbs()
 
 for i = 1, #dbs, 1 do
@@ -53,6 +89,13 @@ for i = 1, #dbs, 1 do
     if db.size == 25 then
         makeCraftTable(db.db, 0)
         makeCraftTable(db.db, 10)
+    elseif db.size == 81 then
+        makeCraftTable1(db.db, 0)
+        makeCraftTable2(db.db, 0)
+        makeCraftTable1(db.db, 27)
+        makeCraftTable2(db.db, 27)
+        makeCraftTable1(db.db, 54)
+        makeCraftTable2(db.db, 54)
     end
 end
 
