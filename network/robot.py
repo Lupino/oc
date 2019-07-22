@@ -117,7 +117,7 @@ function place{func}()
 end
 place{func}()
 return '{func}'
-'''.format(Func=func))
+'''.format(func=func))
 
 def place_down():
     robot_place('Down')

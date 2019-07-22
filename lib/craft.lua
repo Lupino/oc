@@ -24,7 +24,11 @@ function getItemName(slot)
     if ic then
         local item = ic.getStackInInternalSlot(slot)
         if item then
-            return item.label
+            local label = item.label
+            if label == 'Clay' then
+                label = item.name
+            end
+            return label
         end
     end
     return ''

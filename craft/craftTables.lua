@@ -81,4 +81,22 @@ craftTables["Piston"] = {"Twilight Oak Planks", "Twilight Oak Planks", "Twilight
 craftTables["Chest"] = {"Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks", "Twilight Oak Planks"}
 
 craftTables["Crafting Table"] = {"", "", "", "", "Twilight Oak Planks", "Twilight Oak Planks", "", "Twilight Oak Planks", "Twilight Oak Planks"}
+
+craftTables["Hopper"] = {"Iron Ingot", "", "Iron Ingot", "Iron Ingot", "Chest", "Iron Ingot", "", "Iron Ingot", ""}
+craftTables["Inventory Upgrade"] = {"Twilight Oak Planks", "Hopper", "Twilight Oak Planks", "Dropper", "Chest", "Piston", "Twilight Oak Planks", "Microchip (Tier 1)", "Twilight Oak Planks"}
+craftTables["Cactus Green"] = {"", "", "", "", "Green Dyius Fruit", "", "", "", ""}
+craftTables["minecraft:clay_ball"] = {"", "", "", "", "Claya Fruit", "", "", "", ""}
+craftTables["Gold Ingot"] = {"Block of Gold", "", "", "", "", "", "", "", ""}
+craftTables["Powered Rail"] = {"Gold Ingot", "", "Gold Ingot", "Gold Ingot", "Stick", "Gold Ingot", "Gold Ingot", "Redstone", "Gold Ingot"}
+
+craftTables["3D Printer"] = {"Iron Ingot", "Hopper", "Iron Ingot", "Piston", "Microchip (Tier 3)", "Piston", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"}
+craftTables["Bow"] = {"", "Stick", "String", "Stick", "", "String", "", "Stick", "String"}
+craftTables["minecraft:clay"] = {"", "minecraft:clay_ball", "minecraft:clay_ball", "", "minecraft:clay_ball", "minecraft:clay_ball", "", "", ""}
+craftTables["Raw Circuit Board"] = {"Gold Ingot", "minecraft:clay", "", "Cactus Green", "", "", "", "", ""}
+
+craftTables["Dispenser"] = {"Cobblestone", "Cobblestone", "Cobblestone", "Cobblestone", "Bow", "Cobblestone", "Cobblestone", "Redstone", "Cobblestone"}
+craftTables["Bucket"] = {"", "", "", "Iron Ingot", "", "Iron Ingot", "", "Iron Ingot", ""}
+
+craftTables["Ink Cartridge (Empty)"] = {"Iron Nugget", "Dispenser", "Iron Nugget", "Transistor", "Bucket", "Transistor", "Iron Nugget", "Printed Circuit Board (PCB)", "Iron Nugget"}
+
 return craftTables
