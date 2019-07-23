@@ -20,39 +20,9 @@ end
 
 local craft = {}
 
-function getItemName(slot)
-    if ic then
-        local item = ic.getStackInInternalSlot(slot)
-        if item then
-            local label = item.label
-            if label == 'Clay' then
-                label = item.name
-            end
-            local idx = string.find(label, 'Planks')
-            if idx then
-                label = 'Planks'
-            end
-            local idx = string.find(label, 'Wood')
-            if idx then
-                label = 'Wood'
-            end
-            return label
-        end
-    end
-    return ''
-end
-
-function isItem(slot, name)
-    return getItemName(slot) == name
-end
-
-function getSideItemName(side, slot)
-    print('getSideItemName', side, slot)
-    if ic then
-        local item = ic.getStackInSlot(side, slot)
-        if item then
-            return item.label
-        end
+function getLabel(item)
+    if item then
+        local label = item.label
         if label == 'Clay' then
             label = item.name
         end
@@ -64,6 +34,27 @@ function getSideItemName(side, slot)
         if idx then
             label = 'Wood'
         end
+        return label
+    else
+        return ''
+    end
+end
+
+function getItemName(slot)
+    if ic then
+        return getLabel(ic.getStackInInternalSlot(slot))
+    end
+    return ''
+end
+
+function isItem(slot, name)
+    return getItemName(slot) == name
+end
+
+function getSideItemName(side, slot)
+    print('getSideItemName', side, slot)
+    if ic then
+        return getLabel(ic.getStackInSlot(side, slot))
     end
     return ''
 end
