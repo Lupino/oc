@@ -28,6 +28,14 @@ function getItemName(slot)
             if label == 'Clay' then
                 label = item.name
             end
+            local idx = string.find(label, 'Planks')
+            if idx then
+                label = 'Planks'
+            end
+            local idx = string.find(label, 'Wood')
+            if idx then
+                label = 'Wood'
+            end
             return label
         end
     end
@@ -44,6 +52,17 @@ function getSideItemName(side, slot)
         local item = ic.getStackInSlot(side, slot)
         if item then
             return item.label
+        end
+        if label == 'Clay' then
+            label = item.name
+        end
+        local idx = string.find(label, 'Planks')
+        if idx then
+            label = 'Planks'
+        end
+        local idx = string.find(label, 'Wood')
+        if idx then
+            label = 'Wood'
         end
     end
     return ''
