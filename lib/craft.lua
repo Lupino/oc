@@ -471,9 +471,10 @@ function crafting(items, ...)
             while true do
                 slot = findItemOnSides(name)
                 if slot == 0 then
-                    if total >= #ss then
-                        mergeItems()
-                        return crafting(items, ...)
+                    if total < #ss then
+                        break
+                        -- mergeItems()
+                        -- return crafting(items, ...)
                     else
                         return false, name, (#ss - total) * requiredCount
                     end
@@ -487,13 +488,21 @@ function crafting(items, ...)
         end
 
         if count < #ss then
-            return false, name, (#ss - total) * requiredCount
-        end
+            if total >= #ss then
+                count = math.floor(total / #ss)
+                for s = 1, #ss, 1 do
+                    slot = findItem(name, 1)
+                    transferTo(slot, craftTable[ss[s]], count)
+                end
+            else
+                return false, name, (#ss - total) * requiredCount
+            end
+        else
+            count = math.floor(count / #ss)
 
-        count = math.floor(count / #ss)
-
-        for s = 1, #ss, 1 do
-            transferTo(slot, craftTable[ss[s]], count)
+            for s = 1, #ss, 1 do
+                transferTo(slot, craftTable[ss[s]], count)
+            end
         end
 
         if minCount > count then
