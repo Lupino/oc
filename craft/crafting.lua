@@ -1,7 +1,7 @@
 local craft = require('craft')
 local craftTables = require('craftTables')
 local component = require('component')
-local args = {..}
+local args = {...}
 
 local dbs
 function refreshDbs()
