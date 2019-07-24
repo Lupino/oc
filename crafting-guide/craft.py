@@ -162,6 +162,8 @@ def update(name):
         return name + ' (PCB)'
     if name == 'Electronic Circuit':
         return 'Basic Control Circuit'
+    if name == 'Empty Cell':
+        return 'Universal Fluid Cell'
     if name.find('Planks') > -1:
         return 'Planks'
     if name.find('Wood') > -1:
