@@ -187,6 +187,9 @@ got_craftTables.update(origin_craft_tables)
 
 print('local craftTables = {}')
 for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
+    if k.find('Block of') > -1:
+        continue
+
     print('craftTables["' + k + '"] = {"' + '", "'.join(v) + '"}')
 
 print('return craftTables')
