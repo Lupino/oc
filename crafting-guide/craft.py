@@ -1,5 +1,7 @@
 import json
 
+from crafttables import craftTables as origin_craft_tables
+
 data = json.load(open('crafting-guide.json', 'r'))
 
 mods = data['mods']
@@ -160,6 +162,10 @@ def update(name):
         return name + ' (PCB)'
     if name == 'Electronic Circuit':
         return 'Basic Control Circuit'
+    if name.find('Planks') > -1:
+        return 'Planks'
+    if name.find('Wood') > -1:
+        return 'Wood'
     return name
 
 got = ['Railcraft', 'Minecraft', 'Industrial Craft 2', 'OpenComputers', 'Mekanism']
@@ -171,6 +177,16 @@ for mod in mods:
         for item in mod['items']:
             gotItems.append(item['displayName'])
 
+got_craftTables = {}
+
 for k, v in craftTables.items():
     if k in gotItems:
-        print('craftTables["' + update(k) + '"] = {"' + '", "'.join([update(vv) for vv in v]) + '"}')
+        got_craftTables[update(k)] = [update(vv) for vv in v]
+
+got_craftTables.update(origin_craft_tables)
+
+print('local craftTables = {}')
+for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
+    print('craftTables["' + k + '"] = {"' + '", "'.join(v) + '"}')
+
+print('return craftTables')
