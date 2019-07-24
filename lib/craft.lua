@@ -20,21 +20,25 @@ end
 
 local craft = {}
 
+function normal(label)
+    local idx = string.find(label, 'Planks')
+    if idx then
+        label = 'Planks'
+    end
+    local idx = string.find(label, 'Wood')
+    if idx then
+        label = 'Wood'
+    end
+    return label
+end
+
 function getLabel(item)
     if item then
         local label = item.label
         if label == 'Clay' then
             label = item.name
         end
-        local idx = string.find(label, 'Planks')
-        if idx then
-            label = 'Planks'
-        end
-        local idx = string.find(label, 'Wood')
-        if idx then
-            label = 'Wood'
-        end
-        return label
+        return normal(label)
     else
         return ''
     end
@@ -48,7 +52,7 @@ function getItemName(slot)
 end
 
 function isItem(slot, name)
-    return getItemName(slot) == name
+    return getItemName(slot) == normal(name)
 end
 
 function getSideItemName(side, slot)
@@ -60,7 +64,7 @@ function getSideItemName(side, slot)
 end
 
 function isSideItem(side, slot, name)
-    return getSideItemName(side, slot) == name
+    return getSideItemName(side, slot) == normal(name)
 end
 
 function findSideItem(side, itemName)
