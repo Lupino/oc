@@ -186,6 +186,7 @@ for k, v in craftTables.items():
         got_craftTables[update(k)] = [update(vv) for vv in v]
 
 got_craftTables.update(origin_craft_tables)
+# got_craftTables = origin_craft_tables
 
 print('local craftTables = {}')
 for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
