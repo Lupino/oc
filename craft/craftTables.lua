@@ -1,5 +1,5 @@
 local craftTables = {}
-craftTables["10k Coolant Cell"] = {"", "Tin Plate", "", "Tin Plate", "Coolant Cell", "Tin Plate", "", "Tin Plate", ""}
+craftTables["10k Coolant Cell"] = {"", "Tin Plate", "", "Tin Plate", "Universal Fluid Cell", "Tin Plate", "", "Tin Plate", ""}
 craftTables["30k Coolant Cell"] = {"Tin Plate", "Tin Plate", "Tin Plate", "10k Coolant Cell", "10k Coolant Cell", "10k Coolant Cell", "Tin Plate", "Tin Plate", "Tin Plate"}
 craftTables["3D Printer"] = {"Iron Ingot", "Hopper", "Iron Ingot", "Piston", "Microchip (Tier 3)", "Piston", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"}
 craftTables["60k Coolant Cell"] = {"Tin Plate", "30k Coolant Cell", "Tin Plate", "Tin Plate", "Iron Plate", "Tin Plate", "Tin Plate", "30k Coolant Cell", "Tin Plate"}

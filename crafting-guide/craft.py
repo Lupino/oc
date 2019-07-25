@@ -164,13 +164,15 @@ def update(name):
         return 'Basic Control Circuit'
     if name == 'Empty Cell':
         return 'Universal Fluid Cell'
+    if name == 'Coolant Cell':
+        return 'Universal Fluid Cell'
     if name.find('Planks') > -1:
         return 'Planks'
     if name.find('Wood') > -1:
         return 'Wood'
     return name
 
-ignore = ['Electronic Circuit', 'Basic Control Circuit', 'Empty Cell']
+ignore = ['Electronic Circuit', 'Basic Control Circuit']
 
 got = ['Railcraft', 'Minecraft', 'Industrial Craft 2', 'OpenComputers', 'Mekanism']
 
