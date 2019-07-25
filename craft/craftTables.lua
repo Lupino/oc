@@ -46,7 +46,6 @@ craftTables["Arrow"] = {"Flint", "Stick", "Feather", "", "", "", "", "", ""}
 craftTables["Arrow Keys"] = {"", "", "", "", "Button", "", "Button", "Button", "Button"}
 craftTables["Atomic Disassembler"] = {"Enriched Alloy", "Energy Tablet", "Enriched Alloy", "Enriched Alloy", "Atomic Alloy", "Enriched Alloy", "", "Obsidian Ingot", ""}
 craftTables["Automated Steam Trap"] = {"", "Iron Bars", "", "Redstone", "High Pressure Boiler Tank", "Redstone", "", "Dispenser", ""}
-craftTables["Basic Control Circuit"] = {"Insulated Copper Cable", "Redstone", "Insulated Copper Cable", "Insulated Copper Cable", "Iron Plate", "Insulated Copper Cable", "Insulated Copper Cable", "Redstone", "Insulated Copper Cable"}
 craftTables["Basic Energy Cube"] = {"Redstone", "Energy Tablet", "Redstone", "Iron Ingot", "Steel Casing", "Iron Ingot", "Redstone", "Energy Tablet", "Redstone"}
 craftTables["Basic Factory (Combining)"] = {"Redstone", "Basic Control Circuit", "Redstone", "Iron Ingot", "Combiner", "Iron Ingot", "Redstone", "Basic Control Circuit", "Redstone"}
 craftTables["Basic Factory (Compressing)"] = {"Redstone", "Basic Control Circuit", "Redstone", "Iron Ingot", "Osmium Compressor", "Iron Ingot", "Redstone", "Basic Control Circuit", "Redstone"}

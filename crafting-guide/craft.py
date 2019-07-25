@@ -170,6 +170,8 @@ def update(name):
         return 'Wood'
     return name
 
+ignore = ['Electronic Circuit', 'Basic Control Circuit', 'Empty Cell']
+
 got = ['Railcraft', 'Minecraft', 'Industrial Craft 2', 'OpenComputers', 'Mekanism']
 
 gotItems = []
@@ -191,6 +193,9 @@ got_craftTables.update(origin_craft_tables)
 print('local craftTables = {}')
 for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
     if k.find('Block of') > -1:
+        continue
+
+    if k in ignore:
         continue
 
     print('craftTables["' + k + '"] = {"' + '", "'.join(v) + '"}')
