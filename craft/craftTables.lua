@@ -832,6 +832,7 @@ craftTables["Pattern Storage"] = {"Reinforced Stone", "Reinforced Stone", "Reinf
 craftTables["Pellets of RTG Fuel"] = {"Dense Iron Plate", "Dense Iron Plate", "Dense Iron Plate", "Plutonium", "Plutonium", "Plutonium", "Dense Iron Plate", "Dense Iron Plate", "Dense Iron Plate"}
 craftTables["Personal Anchor"] = {"Gold Ingot", "Obsidian", "Gold Ingot", "Emerald", "Ender Pearl", "Emerald", "Gold Ingot", "Obsidian", "Gold Ingot"}
 craftTables["Personal Anchor Cart"] = {"", "Personal Anchor", "", "", "Minecart", "", "", "", ""}
+craftTables["Personal Chest"] = {"Steel Ingot", "Glass", "Steel Ingot", "Chest", "Basic Control Circuit", "Chest", "Steel Ingot", "Steel Ingot", "Steel Ingot"}
 craftTables["Personal Safe"] = {"", "", "", "Basic Control Circuit", "Basic Machine Casing", "Chest", "", "", ""}
 craftTables["Pillar Quartz Block"] = {"Block of Quartz", "", "", "Block of Quartz", "", "", "", "", ""}
 craftTables["Pink Balloon"] = {"", "", "", "Leather", "String", "Pink Dye", "", "", ""}

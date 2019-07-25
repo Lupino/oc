@@ -116,3 +116,4 @@ craftTables["Upgrade Container (Tier 3)"] = ["Gold Ingot", "Microchip (Tier 2)",
 craftTables["Wireless Network Card (Tier 2)"] = ["", "", "", "Ender Pearl", "Microchip (Tier 2)", "", "", "Card Base", ""]
 craftTables["minecraft:clay"] = ["", "minecraft:clay_ball", "minecraft:clay_ball", "", "minecraft:clay_ball", "minecraft:clay_ball", "", "", ""]
 craftTables["minecraft:clay_ball"] = ["", "", "", "", "Claya Fruit", "", "", "", ""]
+craftTables["Personal Chest"] = ["Steel Ingot", "Glass", "Steel Ingot", "Chest", "Basic Control Circuit", "Chest", "Steel Ingot", "Steel Ingot", "Steel Ingot"]
