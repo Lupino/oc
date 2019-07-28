@@ -27,7 +27,9 @@ end
 
 function placeSeed()
     if craft.isItem(currentSeedSlot, seed) then
-        return placeItem(currentSeedSlot)
+        if not placeItem(currentSeedSlot) then
+            robot.useDown()
+        end
     end
     local slot = craft.findItem(seed, 1)
     if slot == 0 then
