@@ -44,12 +44,12 @@ def get_1x3(items, inputs):
 def get_2x3(items, inputs):
     v = table[:]
     v[0] = get_item(items, inputs[0])
-    v[1] = get_item(items, inputs[1])
-    v[2] = get_item(items, inputs[2])
+    v[3] = get_item(items, inputs[1])
+    v[6] = get_item(items, inputs[2])
 
-    v[3] = get_item(items, inputs[3])
+    v[1] = get_item(items, inputs[3])
     v[4] = get_item(items, inputs[4])
-    v[5] = get_item(items, inputs[5])
+    v[7] = get_item(items, inputs[5])
 
     return v
 
