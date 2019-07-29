@@ -1,6 +1,7 @@
 local robot = require('robot')
 local component = require('component')
 local craft = require('craft')
+local os = require('os')
 
 local dye = 'Bone Meal'
 local bone = 'Bone'
@@ -28,7 +29,11 @@ end
 function placeSeed()
     if craft.isItem(currentSeedSlot, seed) then
         if not placeItem(currentSeedSlot) then
+            robot.swingDown()
             robot.useDown()
+            return placeSeed()
+        else
+            return true
         end
     end
     local slot = craft.findItem(seed, 1)
@@ -78,7 +83,7 @@ function runPlaceDye()
     return runPlaceDye()
 end
 
-function main()
+function run_main()
     craft.scanItemsOnSides()
     robot.swingDown()
     if seed == '' then
@@ -90,9 +95,20 @@ function main()
             break
         end
         if not runPlaceDye() then
-            break
+            craft.scanItemsOnSides()
+            if not runPlaceDye() then
+                break
+            end
         end
         robot.swingDown()
+    end
+end
+
+function main()
+    while true do
+        run_main()
+        print('wait 60')
+        os.sleep(60)
     end
 end
 
