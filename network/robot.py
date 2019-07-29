@@ -10,18 +10,27 @@ def api(cmd, query = None):
 
     return url
 
-def run(data):
+def run(data, show=True):
     rsp = requests.post(api('run'), data=data)
 
-    print(rsp.text)
+    if show:
+        print(rsp.text)
+    else:
+        return rsp.text
 
-def upload(data, filename):
+def upload(data, filename, show=True):
     rsp = requests.put(api('upload', {'fileName': filename}), data=data)
-    print(rsp.text)
+    if show:
+        print(rsp.text)
+    else:
+        return rsp.text
 
-def download(filename):
+def download(filename, show=True):
     rsp = requests.get(api('download', {'fileName': filename}))
-    print(rsp.text)
+    if show:
+        print(rsp.text)
+    else:
+        return rsp.text
 
 def get_uptime():
     return run('''
