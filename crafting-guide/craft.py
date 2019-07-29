@@ -168,6 +168,8 @@ def update(name):
         return 'Universal Fluid Cell'
     if name == 'Coolant Cell':
         return 'Universal Fluid Cell'
+    if name == 'Insulated Gold Cable':
+        return '2x Ins. Gold Cable'
     if name.find('Planks') > -1:
         return 'Planks'
     if name.find('Wood') > -1:
