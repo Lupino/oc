@@ -1,7 +1,6 @@
 local internet = require("internet")
 local handle = internet.open("example.com", 18090)
 local computer = require("computer")
--- local serialization = require('serialization')
 
 local maxMsgid = 65536
 local maxLength = 32767
@@ -14,7 +13,6 @@ local DATA = 4
 function pack(msgid, data)
     print('pack', msgid, data)
     msgid = msgid % maxMsgid
-    -- data = serialization.serialize(data)
     local length = #data + 3
     if length > maxLength then
         print('payload is to large ignore.')
@@ -70,18 +68,22 @@ while true do
                         length = string.byte(data, 1)
                         local fn = data:sub(2, 1 + length)
                         data = data:sub(2 + length)
-                        local file = io.open(fn, 'w')
-                        file:write(data)
-                        file:close()
-                        handle:write(pack(msgid, 'OK'))
-                    elseif cmd == DOWNLOAD then
-                        local file = io.open(data, 'r')
-                        if nil == file then
-                            handle:write(pack(msgid, "open file: " .. data .. ' failed'))
+                        local file, reason = io.open(fn, 'w')
+                        if file then
+                            file:write(data)
+                            file:close()
+                            handle:write(pack(msgid, 'OK'))
                         else
+                            handle:write(pack(msgid, 'Error: ' .. reason))
+                        end
+                    elseif cmd == DOWNLOAD then
+                        local file, reason = io.open(data, 'r')
+                        if file then
                             data = file:read('*a')
                             file:close()
                             handle:write(pack(msgid, data))
+                        else
+                            handle:write(pack(msgid, "Error: " .. reason))
                         end
                     end
                 end)
