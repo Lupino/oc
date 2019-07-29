@@ -31,14 +31,11 @@ function pack(msgid, data)
     return msg
 end
 
-function unpack(msg)
-    print('unpack', #msg)
-    local length = string.byte(msg, 1) * 256 + string.byte(msg, 2)
+-- msgid + cmd + data
+function unpackHeader(msg)
     local msgid = string.byte(msg, 3) * 256 + string.byte(msg, 4)
     local cmd = string.byte(msg, 5)
-    local data = msg:sub(6)
-
-    return length, msgid, cmd, data
+    return msgid, cmd
 end
 
 function getLength(msg)
@@ -48,36 +45,76 @@ end
 -- register computer address
 handle:write(pack(0, computer.address()))
 
+function chunkRead(length)
+    local code = ''
+    local chunk = ''
+    while true do
+        size = length
+        if size > 256 then
+            size = 256
+        end
+        if size <= 0 then
+            break
+        end
+        chunk = handle:read(size)
+        code = code .. chunk
+        length = length - #chunk
+    end
+    return code
+end
+
+function chunkReadAndSave(file, length)
+    local chunk = ''
+    while true do
+        size = length
+        if size > 256 then
+            size = 256
+        end
+        if size <= 0 then
+            break
+        end
+
+        chunk = handle:read(size)
+
+        file:write(chunk)
+
+        length = length - #chunk
+    end
+end
+
 while true do
     local h = handle:read(2)
     if #h == 2 then
         local length = getLength(h)
         if length > 3 and length < maxLength then
-            local msg = handle:read(length)
-            if #msg == length then
-                local _, msgid, cmd, data = unpack(h .. msg)
+            local msg = handle:read(3)
+            if #msg == 3 then
+                local msgid, cmd = unpackHeader(msg)
+                length = length - 3
                 local result, reason = pcall(function()
                     if cmd == RUN then
-                        local result, reason = load(data)
+                        local code = chunkRead(length)
+                        local result, reason = load(code)
                         if result then
                             handle:write(pack(msgid, result()))
                         else
                             handle:write(pack(msgid, reason))
                         end
                     elseif cmd == UPLOAD then
-                        length = string.byte(data, 1)
-                        local fn = data:sub(2, 1 + length)
-                        data = data:sub(2 + length)
+                        local fnL = string.byte(handle:read(1), 1)
+                        local fn = chunkRead(fnL)
+                        length = length - 1 - fnL
                         local file, reason = io.open(fn, 'w')
                         if file then
-                            file:write(data)
+                            chunkReadAndSave(file, length)
                             file:close()
                             handle:write(pack(msgid, 'OK'))
                         else
                             handle:write(pack(msgid, 'Error: ' .. reason))
                         end
                     elseif cmd == DOWNLOAD then
-                        local file, reason = io.open(data, 'r')
+                        local fn = chunkRead(length)
+                        local file, reason = io.open(fn, 'r')
                         if file then
                             data = file:read('*a')
                             file:close()
