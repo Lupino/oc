@@ -1,20 +1,37 @@
 import requests
+from urllib.parse import urlencode
 
-uuid = 'you-robot-uuid'
-def request(data):
-    rsp = requests.post('http://example.com/api/request/{}/'.format(uuid), data=data)
+uuid = 'you-uuid'
+
+def api(cmd, query = None):
+    url = 'http://example.com/api/{}/{}/'.format(cmd, uuid)
+    if query:
+        url = '{}?{}'.format(url, urlencode(query))
+
+    return url
+
+def run(data):
+    rsp = requests.post(api('run'), data=data)
 
     print(rsp.text)
 
+def upload(data, filename):
+    rsp = requests.put(api('upload', {'fileName': filename}), data=data)
+    print(rsp.text)
+
+def download(filename):
+    rsp = requests.get(api('download', {'fileName': filename}))
+    print(rsp.text)
+
 def get_uptime():
-    return request('''
+    return run('''
 local computer = require('computer')
 local serialization = require('serialization')
 return serialization.serialize(computer.uptime())
 ''')
 
 def robot_run(func):
-    request('''
+    run('''
 local robot = require('robot')
 robot.{}()
 return '{}'
@@ -37,7 +54,7 @@ def robot_force_run(func):
     if func == 'forward':
         Func = ''
 
-    request('''
+    run('''
 local robot = require('robot')
 function {func}()
     local can, type = robot.detect{Func}()
@@ -73,8 +90,8 @@ def use_down():
 def use():
     robot_run('use')
 
-def robot_place(func):
-    request('''
+def robot_place(func = ''):
+    run('''
 local robot = require("robot")
 local component = require("component")
 
@@ -126,21 +143,10 @@ def place_up():
     robot_place('Up')
 
 def place():
-    robot_place('')
-
-
-def upload(data, filename='test.lua'):
-    data = ['file:write("{}\\n")'.format(line.replace('"', '\\"')) for line in data.split('\n')]
-    request('''
-local io = require('io')
-file = io.open('{}', 'w')
-{}
-file:close()
-return 'true'
-'''.format(filename, '\n'.join(data)))
+    robot_place()
 
 def make_craft_table():
-    request('''
+    run('''
 local component = require('component')
 local dbs
 local output = ''
