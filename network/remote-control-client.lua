@@ -33,8 +33,8 @@ end
 
 -- msgid + cmd + data
 function unpackHeader(msg)
-    local msgid = string.byte(msg, 3) * 256 + string.byte(msg, 4)
-    local cmd = string.byte(msg, 5)
+    local msgid = string.byte(msg, 1) * 256 + string.byte(msg, 2)
+    local cmd = string.byte(msg, 3)
     return msgid, cmd
 end
 
