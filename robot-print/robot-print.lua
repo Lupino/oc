@@ -10,6 +10,7 @@ local enableIC = component.isAvailable("inventory_controller")
 
 local itemName = ''
 local ignorePlace = false
+local isPlant = false
 
 function getItemName(slot)
     if not enableIC then
@@ -84,7 +85,11 @@ function placeDown()
             local count = robot.count(currentSlot)
             robot.placeDown()
             if robot.count(currentSlot) == count then
-                robot.swingDown()
+                if isPlant then
+                    robot.useDown()
+                else
+                    robot.swingDown()
+                end
                 placeDown()
             end
         end
@@ -123,6 +128,9 @@ end
 
 function main()
     itemName = getItemName(1)
+    if opts.plant then
+        isPlant = true
+    end
     if opts.dig then
         ignorePlace = true
         while true do
