@@ -79,14 +79,13 @@ function checkSlot()
 end
 
 function placeDown()
-    local can, type = robot.detectDown()
-    if can then
-        robot.swingDown()
-        placeDown()
-    else
-        if itemName ~= '' then
-            if checkSlot() then
-                robot.placeDown()
+    if itemName ~= '' then
+        if checkSlot() then
+            local count = robot.count(currentSlot)
+            robot.placeDown()
+            if robot.count(currentSlot) == count then
+                robot.swingDown()
+                placeDown()
             end
         end
     end
