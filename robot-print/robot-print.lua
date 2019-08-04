@@ -2,6 +2,7 @@ local robot = require("robot")
 local shell = require("shell")
 local args, opts = shell.parse(...)
 local component = require("component")
+local os = require('os')
 
 local currentSlot = 1
 local maxSlot = robot.inventorySize()
@@ -75,7 +76,10 @@ function checkSlot()
             robot.select(currentSlot)
             return true
         end
-        return false
+        print('Item ' .. itemName .. ' not found.')
+        print('wait 60')
+        os.sleep(60)
+        return checkSlot()
     end
 end
 
