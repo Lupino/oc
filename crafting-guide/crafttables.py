@@ -154,3 +154,6 @@ craftTables["Advanced Charging Battery"] = ["Heat Exchanger", "Advanced RE-Batte
 craftTables["Gold Plate"] = ["", "", "", "", "Gold Ingot", "Forge Hammer", "", "", ""]
 craftTables["Charging Energy Crystal"] = ["Component Heat Exchanger", "Energy Crystal", "Component Heat Exchanger", "Energy Crystal", "Advanced Charging Battery", "Energy Crystal", "Component Heat Exchanger", "Energy Crystal", "Component Heat Exchanger"]
 craftTables["Charging Lapotron Crystal"] = ["Advanced Heat Exchanger", "Lapotron Crystal", "Advanced Heat Exchanger", "Lapotron Crystal", "Charging Energy Crystal", "Lapotron Crystal", "Advanced Heat Exchanger", "Lapotron Crystal", "Advanced Heat Exchanger"]
+craftTables["Glowstone Dust"] = ["", "", "", "", "Glowyas Fruit", "", "", "", ""]
+craftTables["Glowstone"] = ["", "", "", "", "Glowstone Dust", "Glowstone Dust", "", "Glowstone Dust", "Glowstone Dust"]
+craftTables["Greenhouse"] = ["Stick", "Glowstone", "Stick", "Glass", "", "Glass", "Glass", "", "Glass"]
