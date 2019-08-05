@@ -25,6 +25,10 @@ def upload(data, filename, show=True):
     else:
         return rsp.text
 
+def uploadWith(fn, filename, show=True):
+    return upload(open(fn, 'r').read(), filename, show)
+
+
 def download(filename, show=True):
     rsp = requests.get(api('download', {'fileName': filename}))
     if show:
