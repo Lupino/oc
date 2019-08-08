@@ -2,6 +2,9 @@ local craft = require('craft')
 local craftTables = require('craftTables')
 local component = require('component')
 local args = {...}
+local os = require('os')
+
+local needItems = {}
 
 local dbs
 function refreshDbs()
@@ -28,6 +31,15 @@ function getDbItemName(db, slot)
         return item.label
     else
         return ''
+    end
+end
+
+function makeNeedItems(db)
+    for slot = 1, 9, 1 do
+        local name = getDbItemName(db, slot)
+        if name ~= '' then
+            table.insert(needItems, name)
+        end
     end
 end
 
@@ -96,15 +108,22 @@ for i = 1, #dbs, 1 do
         makeCraftTable2(db.db, 27)
         makeCraftTable1(db.db, 54)
         makeCraftTable2(db.db, 54)
+    elseif db.size == 9 then
+        makeNeedItems(db.db)
     end
 end
 
 function run_craft(name, count)
+    if count > 64 then
+        count = 64
+    end
+
     print('run_craft', name, count)
     if not craftTables[name] then
         print('not fount craftable:', name)
         return false
     end
+
     craft.mergeItems()
     local ret, needName, needCount = craft.crafting(craftTables[name], count)
     if ret then
@@ -123,8 +142,6 @@ end
 function main()
     local target
     local count = 1
-    local size = 64
-    local running = true
     if #args == 2 then
         target = args[1]
         count = tonumber(args[2])
@@ -135,25 +152,49 @@ function main()
         target = craft.getItemName(1)
     end
 
+    if target == '' then
+        if #needItems == 0 then
+            return
+        end
+    end
+
     craft.cleanAll()
 
     craft.scanItemsOnSides()
 
+    if #needItems > 0 then
+        for i=1,#needItems,1 do
+            craft_main(needItems[i], count)
+        end
+    else
+        craft_main(target, count)
+    end
+end
+
+function craft_main(target, count)
+    local size = 64
+    local running = true
     local total = craft.countItems(target)
 
     count = count + total
 
-    while running do
+    while true do
         size = count - total
         if size > 64 then
             size = 64
         end
 
-        running = run_craft(target, size)
-        if not running then
-            craft.cleanAll()
+        while true do
             running = run_craft(target, size)
             if not running then
+                craft.cleanAll()
+                running = run_craft(target, size)
+                if not running then
+                    print('need resources')
+                    print('wait 10s')
+                    os.sleep(10)
+                end
+            else
                 break
             end
         end
