@@ -177,6 +177,8 @@ def update(name):
     return name
 
 ignore = ['Electronic Circuit', 'Basic Control Circuit']
+needed = ['Block of Chamelium', 'Block of Coal']
+
 
 got = ['Railcraft', 'Minecraft', 'Industrial Craft 2', 'OpenComputers', 'Mekanism']
 
@@ -199,7 +201,8 @@ got_craftTables.update(origin_craft_tables)
 print('local craftTables = {}')
 for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
     if k.find('Block of') > -1:
-        continue
+        if k not in needed:
+            continue
 
     if k in ignore:
         continue
