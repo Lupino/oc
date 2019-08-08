@@ -193,6 +193,8 @@ function craft_main(target, count)
                     print('need resources')
                     print('wait 10s')
                     os.sleep(10)
+                else
+                    break
                 end
             else
                 break
