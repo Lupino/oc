@@ -9,6 +9,8 @@ local RUN = 1
 local UPLOAD = 2
 local DOWNLOAD = 3
 local DATA = 4
+local APPEND = 5
+local END = 6
 
 function pack(msgid, data)
     print('pack', msgid, data)
@@ -82,7 +84,9 @@ function chunkReadAndSave(file, length)
     end
 end
 
-while true do
+local running = true
+
+while running do
     local h = handle:read(2)
     if #h == 2 then
         local length = getLength(h)
@@ -122,6 +126,21 @@ while true do
                         else
                             handle:write(pack(msgid, "Error: " .. reason))
                         end
+                    elseif cmd == APPEND then
+                        local fnL = string.byte(handle:read(1), 1)
+                        local fn = chunkRead(fnL)
+                        length = length - 1 - fnL
+                        local file, reason = io.open(fn, 'a')
+                        if file then
+                            chunkReadAndSave(file, length)
+                            file:close()
+                            handle:write(pack(msgid, 'OK'))
+                        else
+                            handle:write(pack(msgid, 'Error: ' .. reason))
+                        end
+                    elseif cmd == END then
+                        handle:write(pack(msgid, "Shutdown ..."))
+                        running = false
                     end
                 end)
                 if not result then

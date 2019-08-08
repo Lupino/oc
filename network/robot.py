@@ -18,19 +18,35 @@ def run(data, show=True):
     else:
         return rsp.text
 
-def upload(data, filename, show=True):
-    rsp = requests.put(api('upload', {'fileName': filename}), data=data)
+def upload(data, filename, append=False, show=True):
+    cmd = 'append' if append else 'upload'
+    rsp = requests.put(api(cmd, {'fileName': filename}), data=data)
     if show:
         print(rsp.text)
     else:
         return rsp.text
 
 def uploadWith(fn, filename, show=True):
-    return upload(open(fn, 'r').read(), filename, show)
+    data = open(fn, 'r').read()
+    batch_size = 10240     # 10k
+    ret = upload(data[:batch_size], filename, False, show)
+    while True:
+        data = data[batch_size:]
+        if not data:
+            break
+        upload(data[:batch_size], filename, True, True)
 
+    return ret
 
 def download(filename, show=True):
     rsp = requests.get(api('download', {'fileName': filename}))
+    if show:
+        print(rsp.text)
+    else:
+        return rsp.text
+
+def end(show=True):
+    rsp = requests.post(api('end'))
     if show:
         print(rsp.text)
     else:
