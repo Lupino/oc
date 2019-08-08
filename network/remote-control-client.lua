@@ -90,7 +90,7 @@ while running do
     local h = handle:read(2)
     if #h == 2 then
         local length = getLength(h)
-        if length > 3 and length < maxLength then
+        if length >= 3 and length < maxLength then
             local msg = handle:read(3)
             if #msg == 3 then
                 local msgid, cmd = unpackHeader(msg)
@@ -150,3 +150,5 @@ while running do
         end
     end
 end
+
+handle:close()
