@@ -180,7 +180,7 @@ ignore = ['Electronic Circuit', 'Basic Control Circuit']
 needed = ['Block of Chamelium', 'Block of Coal']
 
 
-got = ['Railcraft', 'Minecraft', 'Industrial Craft 2', 'OpenComputers', 'Mekanism']
+got = ['Minecraft', 'Industrial Craft 2', 'OpenComputers', 'Mekanism']
 
 gotItems = []
 
