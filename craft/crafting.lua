@@ -6,6 +6,10 @@ local os = require('os')
 
 local needItems = {}
 
+local maxCraftCount = {}
+maxCraftCount['Forge Hammer'] = 1
+maxCraftCount['Cutter'] = 1
+
 local dbs
 function refreshDbs()
   dbs = {}
@@ -118,6 +122,10 @@ function run_craft(name, count)
         count = 64
     end
 
+    if maxCraftCount[name] then
+        count = maxCraftCount[name]
+    end
+
     print('run_craft', name, count)
     if not craftTables[name] then
         print('not fount craftable:', name)
@@ -159,8 +167,6 @@ function main()
     end
 
     craft.cleanAll()
-
-    -- craft.scanItemsOnSides()
 
     if #needItems > 0 then
         for i=1,#needItems,1 do
