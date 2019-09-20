@@ -160,7 +160,7 @@ function main()
 
     craft.cleanAll()
 
-    craft.scanItemsOnSides()
+    -- craft.scanItemsOnSides()
 
     if #needItems > 0 then
         for i=1,#needItems,1 do
