@@ -111,7 +111,12 @@ function suckFromSlot(side, slot)
         if newSlot > 0 then
             robot.select(newSlot)
             ic.suckFromSlot(side, slot)
-            insertSideEmptySlots(side, slot)
+            if isEmptySideSlot(side, slot) then
+                insertSideEmptySlots(side, slot)
+            else
+                local name = getSideItemName(side, slot)
+                insertSideItems(side, slot, name)
+            end
             return newSlot
         end
     end
