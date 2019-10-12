@@ -59,26 +59,28 @@ local serialization = require('serialization')
 return serialization.serialize(computer.uptime())
 ''')
 
-def robot_run(func):
+def robot_run(func, count = 1):
     run('''
 local robot = require('robot')
-robot.{}()
-return '{}'
-'''.format(func, func))
+for i = 1, {count}, 1 do
+    robot.{func}()
+end
+return '{func}'
+'''.format(func=func, count=count))
 
-def up():
-    robot_run('up')
+def up(count=1):
+    robot_run('up', count)
 
-def down():
-    robot_run('down')
+def down(count=1):
+    robot_run('down', count)
 
-def forward():
-    robot_run('forward')
+def forward(count=1):
+    robot_run('forward', count)
 
-def back():
-    robot_run('back')
+def back(count=1):
+    robot_run('back', count)
 
-def robot_force_run(func):
+def robot_force_run(func, count = 1):
     Func = func.capitalize()
     if func == 'forward':
         Func = ''
@@ -94,24 +96,26 @@ function {func}()
         robot.{func}()
     end
 end
-{func}()
+for i = 1, {count}, 1 do
+    {func}()
+end
 return '{func}'
-'''.format(func=func, Func=Func))
+'''.format(func=func, Func=Func, count=count))
 
-def force_up():
-    robot_force_run('up')
+def force_up(count=1):
+    robot_force_run('up', count)
 
-def force_down():
-    robot_force_run('down')
+def force_down(count=1):
+    robot_force_run('down', count)
 
-def force_forward():
-    robot_force_run('forward')
+def force_forward(count=1):
+    robot_force_run('forward', count)
 
 def turn_left():
     robot_run('turnLeft')
 
 def turn_right():
-    robot_run('turnLeft')
+    robot_run('turnRight')
 
 def use_down():
     robot_run('useDown')
@@ -119,7 +123,7 @@ def use_down():
 def use():
     robot_run('use')
 
-def robot_place(func = ''):
+def robot_place(func = '', forward_count = 0):
     run('''
 local robot = require("robot")
 local component = require("component")
@@ -161,12 +165,21 @@ function place{func}()
         end
     end
 end
-place{func}()
-return '{func}'
-'''.format(func=func))
+forward_count = {forward_count}
 
-def place_down():
-    robot_place('Down')
+if forward_count > 0 then
+    for i = 1, forward_count, 1 do
+        place{func}()
+        robot.forward()
+    end
+else
+    place{func}()
+end
+return '{func}'
+'''.format(func=func, forward_count=forward_count))
+
+def place_down(forward_count = 0):
+    robot_place('Down', forward_count)
 
 def place_up():
     robot_place('Up')
@@ -178,3 +191,33 @@ def make_craft_table():
     data = open('../craft/make_craft_table.lua', 'r').read()
     data = data.replace('print(output)', 'return output')
     run(data)
+
+def crafting(itemName, count=1):
+    run('''
+local crafting = loadfile('/usr/bin/crafting.lua')
+crafting('{}', {})
+return 'crafted'
+    '''.format(itemName, count))
+
+def crafting_scan():
+    run('''
+local craft = require('craft')
+craft.scanItemsOnSides()
+return 'scanItemsOnSides'
+    ''')
+
+
+def consume():
+    run('''
+local robot = require('robot')
+local component = require('component')
+local exp = component.experience
+
+for i = 1, 16, 1 do
+    robot.select(i)
+    for j = 1, 64, 1 do
+        exp.consume()
+    end
+end
+return 'consumed'
+    ''')
