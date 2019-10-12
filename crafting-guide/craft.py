@@ -157,19 +157,24 @@ for item in items:
 # Industrial Craft 2
 # OpenComputers
 
+name_map = {
+    'Printed Circuit Board': 'Printed Circuit Board (PCB)',
+    'Electronic Circuit': 'Basic Control Circuit',
+    'Advanced Circuit': 'Advanced Control Circuit',
+    'Empty Cell': 'Universal Fluid Cell',
+    'Coolant Cell': 'Universal Fluid Cell',
+    'Insulated Gold Cable': '2x Ins. Gold Cable',
+    'Hard Disk Drive (Tier 1)': 'Hard Disk Drive (Tier 1) (1MB)',
+    'Hard Disk Drive (Tier 2)': 'Hard Disk Drive (Tier 2) (2MB)',
+    'Hard Disk Drive (Tier 3)': 'Hard Disk Drive (Tier 3) (4MB)',
+}
+
 def update(name):
-    if name == 'Printed Circuit Board':
-        return name + ' (PCB)'
-    if name == 'Electronic Circuit':
-        return 'Basic Control Circuit'
-    if name == 'Advanced Circuit':
-        return 'Advanced Control Circuit'
-    if name == 'Empty Cell':
-        return 'Universal Fluid Cell'
-    if name == 'Coolant Cell':
-        return 'Universal Fluid Cell'
-    if name == 'Insulated Gold Cable':
-        return '2x Ins. Gold Cable'
+
+    new_name = name_map.get(name, None)
+    if new_name:
+        return new_name
+
     if name.find('Planks') > -1:
         return 'Planks'
     if name.find('Wood') > -1:
