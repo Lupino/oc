@@ -1,7 +1,7 @@
 craftTables = {}
 craftTables["3D Printer"] = ["Iron Ingot", "Hopper", "Iron Ingot", "Piston", "Microchip (Tier 3)", "Piston", "Iron Ingot", "Printed Circuit Board (PCB)", "Iron Ingot"]
-craftTables["Accelerated Processing Unit (APU) (Tier 1)"] = ["Gold Nugget", "Microchip (Tier 1)", "Gold Nugget", "Central Processing Unit (CPU) (Tier 2)", "Component Bus (Tier 1)", "Graphics Card (Tier 1)", "Gold Nugget", "Microchip (Tier 1)", "Gold Nugget"]
-craftTables["Accelerated Processing Unit (APU) (Tier 2)"] = ["Diamond Chip", "Microchip (Tier 2)", "Diamond Chip", "Central Processing Unit (CPU) (Tier 3)", "Component Bus (Tier 2)", "Graphics Card (Tier 2)", "Diamond Chip", "Microchip (Tier 2)", "Diamond Chip"]
+craftTables["Accelerated Processing Unit (APU) (Tier 2)"] = ["Gold Nugget", "Microchip (Tier 1)", "Gold Nugget", "Central Processing Unit (CPU) (Tier 2)", "Component Bus (Tier 1)", "Graphics Card (Tier 1)", "Gold Nugget", "Microchip (Tier 1)", "Gold Nugget"]
+craftTables["Accelerated Processing Unit (APU) (Tier 3)"] = ["Diamond Chip", "Microchip (Tier 2)", "Diamond Chip", "Central Processing Unit (CPU) (Tier 3)", "Component Bus (Tier 2)", "Graphics Card (Tier 2)", "Diamond Chip", "Microchip (Tier 2)", "Diamond Chip"]
 craftTables["Advanced Bin"] = ["Cobblestone", "Advanced Control Circuit", "Cobblestone", "Enriched Alloy", "Basic Bin", "Enriched Alloy", "Cobblestone", "Cobblestone", "Cobblestone"]
 craftTables["Advanced Control Circuit"] = ["", "", "", "Enriched Alloy", "Basic Control Circuit", "Enriched Alloy", "", "", ""]
 craftTables["Advanced Energy Cube"] = ["Enriched Alloy", "Energy Tablet", "Enriched Alloy", "Osmium Ingot", "Basic Energy Cube", "Osmium Ingot", "Enriched Alloy", "Energy Tablet", "Enriched Alloy"]
