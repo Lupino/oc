@@ -1,6 +1,8 @@
 local internet = require("internet")
 local handle = internet.open("example.com", 18090)
 local computer = require("computer")
+local thread = require("thread")
+local os = require("os")
 
 local maxMsgid = 65536
 local maxLength = 32767
@@ -86,6 +88,15 @@ end
 
 local running = true
 
+local ping_thread = thread.create(function()
+    while running do
+        os.sleep(5)
+        handle:write(pack(1, 'ping'))
+    end
+end)
+
+local run_thread
+
 while running do
     local h = handle:read(2)
     if #h == 2 then
@@ -98,12 +109,18 @@ while running do
                 local result, reason = pcall(function()
                     if cmd == RUN then
                         local code = chunkRead(length)
-                        local result, reason = load(code)
-                        if result then
-                            handle:write(pack(msgid, result()))
-                        else
-                            handle:write(pack(msgid, reason))
+                        if run_thread then
+                            run_thread:kill()
+                            run_thread = nil
                         end
+                        run_thread = thread.create(function(code)
+                            local result, reason = load(code)
+                            if result then
+                                handle:write(pack(msgid, result()))
+                            else
+                                handle:write(pack(msgid, reason))
+                            end
+                        end, code)
                     elseif cmd == UPLOAD then
                         local fnL = string.byte(handle:read(1), 1)
                         local fn = chunkRead(fnL)

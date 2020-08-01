@@ -1,5 +1,6 @@
 import requests
 from urllib.parse import urlencode
+import os
 
 uuid = 'you-uuid'
 
@@ -26,9 +27,11 @@ def upload(data, filename, append=False, show=True):
     else:
         return rsp.text
 
-def uploadWith(fn, filename, show=True):
+def uploadWith(fn, filename=None, show=True):
     data = open(fn, 'r').read()
     batch_size = 10240     # 10k
+    if filename is None:
+        filename = os.path.basename(fn)
     ret = upload(data[:batch_size], filename, False, show)
     while True:
         data = data[batch_size:]
