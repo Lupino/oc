@@ -203,7 +203,7 @@ for k, v in craftTables.items():
 got_craftTables.update(origin_craft_tables)
 # got_craftTables = origin_craft_tables
 
-print('local craftTables = {}')
+print('craftTables = {}')
 for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
     if k.find('Block of') > -1:
         if k not in needed:
@@ -212,6 +212,6 @@ for k, v in sorted(list(got_craftTables.items()), key=lambda x: x[0]):
     if k in ignore:
         continue
 
-    print('craftTables["' + k + '"] = {"' + '", "'.join(v) + '"}')
+    print('craftTables["' + k + '"] = ["' + '", "'.join(v) + '"]')
 
 print('return craftTables')
